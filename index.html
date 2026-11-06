@@ -135,8 +135,10 @@ svg.gm{width:var(--z);height:var(--z)}
 .gt{border:6px solid #6d4520;border-radius:14px;background:#1f8f4e;box-shadow:inset 0 0 12px rgba(0,0,0,.5);overflow:hidden}
 .gt canvas{display:block;width:100%;height:auto;touch-action:none}
 .gst{font-weight:800;text-align:center;margin:8px 0}
-.gps{display:flex;gap:8px;margin-top:8px}.gpc{flex:1;border:2px solid var(--line);border-radius:12px;padding:6px 8px;text-align:center;background:#fff6dc;font-size:13px}
+.gps{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}.gpc{flex:1;min-width:90px;border:2px solid var(--line);border-radius:12px;padding:6px 8px;text-align:center;background:#fff6dc;font-size:13px}
 .gpc.t{border-color:#3c9d3c;box-shadow:0 0 10px rgba(60,157,60,.5)}
+.tt{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;max-width:300px;margin:0 auto}.tt button{aspect-ratio:1;font-size:40px;border:3px solid #8b5a2b;border-radius:12px;background:#fff6dc;padding:0}.tt button.l{box-shadow:0 0 0 3px #22c55e}
+.mm{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}.mm button{aspect-ratio:1;font-size:26px;border:3px solid #8b5a2b;border-radius:12px;background:#ffd45c;padding:0}.mm button.up{background:#fff6dc}.mm button.ok{background:#e2f6d6;border-color:#3c9d3c}.mm button:disabled{color:inherit}
 .c4{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;background:#1d4ed8;padding:6px;border-radius:12px;border:3px solid #1e3a8a}
 .c4c{display:flex;flex-direction:column;gap:4px;padding:0;border:0;background:none}
 .c4c i{display:block;aspect-ratio:1;border-radius:50%;background:#e8eefc}.c4c i.r{background:#e63946}.c4c i.y{background:#ffd23f}.c4c i.l{box-shadow:0 0 0 3px #fff}
@@ -272,7 +274,7 @@ function statusBar(){const f=x=>new Date(x).toLocaleTimeString([],{hour:"2-digit
 function link0(){return""}
 function myS(){return steps(me)}
 function pickHTML(L){return `<div class="modal"><div class="card" style="margin:0;width:100%;max-width:380px;max-height:85vh;overflow:auto"><h1>Welcome, Adventurer! 🎒</h1><p class="sub">Who are you? Tap your name to see your journey.</p>${L.map(q=>`<button class="q" data-pick="${q.id}">${avH(q.p,q.id)}<b>${esc(q.p.name)}</b></button>`).join("")}<div class="sub" style="text-align:center;margin-top:12px"><a href="#" id="adm0" style="color:var(--accent)">🔒 I'm an admin</a></div><div id="pbox" style="display:none"><input id="pin0" type="password" placeholder="Admin PIN"><button class="pri" id="pgo0">Unlock</button></div></div></div>`}
-function hdr(){const e=document.querySelector("header .sub");if(!e)return;const f=LASTT?new Date(LASTT).toLocaleString([],{month:"short",day:"numeric",hour:"numeric",minute:"2-digit"}):"";e.textContent="Journey Across the Philippines · v9 💬🎵🎮"+(LASTT&&!master?" · Progress as of "+f:"")+(viewer?" · Admin (view only)":"")}
+function hdr(){const e=document.querySelector("header .sub");if(!e)return;const f=LASTT?new Date(LASTT).toLocaleString([],{month:"short",day:"numeric",hour:"numeric",minute:"2-digit"}):"";e.textContent="Journey Across the Philippines · v11 💬🎵🎮"+(LASTT&&!master?" · Progress as of "+f:"")+(viewer?" · Admin (view only)":"")}
 function view(){
  if(tab==="map")return header()+`<div class="mapwrap">${mapSVG()}</div><div class="card" id="info"><b>Our Journey</b> · ${list().length} adventurers · ${list().reduce((a,q)=>a+q.s,0)} total steps<br><span class="sub">Tap a traveller or a destination on the map.</span></div>`;
  if(tab==="quest"){const T=(master||viewer)?players[mp]:me;if(!T)return"";const c=curWeek(),a=(T.weeks&&T.weeks[wk])||[0,0,0,0],n=a.filter(Boolean).length,ws=Math.min(5,n+(n===4?1:0));
@@ -442,10 +444,18 @@ cxTick();
 
 /* ===== Games: play together ===== */
 const GM={rooms:{},seen:{},cur:null,aim:null,d:null,raf:0};
-const GG={pool:{i:"🎱",n:"Billiards",d:"2 players · pot the most balls"},c4:{i:"🔴",n:"Connect 4",d:"2 players · line up four"}};
+const GG={pool:{i:"🎱",n:"Billiards",d:"2–8 players · take turns, pot the most"},c4:{i:"🔴",n:"Connect 4",d:"2+ players · two teams, play together"},ttt:{i:"❌",n:"Tic-Tac-Toe",d:"2+ players · two teams, play together"},mem:{i:"🧠",n:"Memory Match",d:"2–8 players · take turns, find pairs"}};
+const MEM=["🥭","🌴","🐚","🍍","🌋","🚤","🎒","🧭","🏔️","🌺","🐬","🏝️"];
+const TEAM={c4:1,ttt:1};
+const nxt=(r,t)=>{const n=r.players.length;for(let i=1;i<=n;i++){const j=(t+i)%n;if(!r.players[j].x)return j}return t};
+const who=(r,id)=>TEAM[r.g]?r.players.some((p,i)=>!p.x&&p.id===id&&i%2===r.st.turn):!!(r.players[r.st.turn]&&!r.players[r.st.turn].x&&r.players[r.st.turn].id===id);
+const win=sc=>{const m=Math.max(...sc),a=sc.map((v,i)=>v===m?i:-1).filter(i=>i>=0);return a.length===1?a[0]:-1};
 const PW=600,PH=300,PR=9.5,PK=[[0,0],[300,0],[600,0],[0,300],[300,300],[600,300]],PC=["#f8f8f8","#f4c20d","#1e63d6","#d62828","#7b2fb0","#f77f00","#1b9a45","#8e2424","#151515","#f4c20d","#1e63d6"];
 function pInit(){const b=[[150,150,1,0,0]];for(let r=0;r<4;r++)for(let i=0;i<=r;i++)b.push([420+r*17,150+(i-r/2)*19.2,1,0,0]);return{b,turn:0,sc:[0,0],over:null,pot:[]}}
-function gInit(g,e){if(g==="pool"){const s=pInit();s.turn=e%2;return s}return{g:Array(42).fill(-1),turn:e%2,over:null,last:-1}}
+function gInit(g,e,id,n){n=Math.max(2,n||1);if(g==="pool"){const s=pInit();s.sc=Array(n).fill(0);s.turn=e%n;return s}
+ if(g==="ttt")return{g:Array(9).fill(-1),turn:e%2,over:null,last:-1};
+ if(g==="mem"){let x=parseInt(hs(id+e).slice(0,6),36)||7;const a=[...MEM,...MEM];for(let i=a.length-1;i>0;i--){x=(Math.imul(x,1103515245)+12345)>>>0;const j=(x>>>8)%(i+1);[a[i],a[j]]=[a[j],a[i]]}return{c:a,m:Array(24).fill(0),o:[],sh:[],sc:Array(n).fill(0),turn:e%n,over:null}}
+ return{g:Array(42).fill(-1),turn:e%2,over:null,last:-1}}
 // Deterministic physics: only + - * / and sqrt, so every phone computes the same shot.
 function pStep(s){const b=s.b;let mv=0;
  for(let n=0;n<b.length;n++){const q=b[n];if(!q[2])continue;q[0]+=q[3];q[1]+=q[4];q[3]*=.994;q[4]*=.994;
@@ -458,17 +468,21 @@ function pStep(s){const b=s.b;let mv=0;
  return mv}
 function pEnd(r){const s=r.st;let k=0,cue=0;s.pot.forEach(i=>{if(i)k++;else cue=1});s.pot=[];s.sc[s.turn]+=k;
  if(cue){let x=150,t=0;const free=()=>s.b.every((q,i)=>!i||!q[2]||(q[0]-x)*(q[0]-x)+(q[1]-150)*(q[1]-150)>4*PR*PR);while(!free()&&t++<40)x-=3;s.b[0]=[x,150,1,0,0]}
- if(!s.b.some((q,i)=>i&&q[2])){s.over={w:s.sc[0]===s.sc[1]?-1:s.sc[0]>s.sc[1]?0:1}}else if(cue||!k)s.turn^=1}
-function cMove(r,m){const s=r.st,c=+m.c;if(s.over||!(c>=0&&c<7)||!r.players[s.turn]||r.players[s.turn].id!==m.id)return;let rw=5;while(rw>=0&&s.g[rw*7+c]>=0)rw--;if(rw<0)return;
+ if(!s.b.some((q,i)=>i&&q[2])){s.over={w:win(s.sc)}}else if(cue||!k)s.turn=nxt(r,s.turn)}
+function tMove(r,m){const s=r.st,c=+m.c;if(s.over||!(c>=0&&c<9)||s.g[c]>=0||!who(r,m.id))return;s.g[c]=s.turn;s.last=c;
+ if([[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]].some(l=>l.every(i=>s.g[i]===s.turn)))s.over={w:s.turn};else if(s.g.every(v=>v>=0))s.over={w:-1};else s.turn^=1}
+function mMove(r,m){const s=r.st,c=+m.c;if(s.over||!(c>=0&&c<24)||s.m[c]||s.o.includes(c)||!who(r,m.id))return;s.sh=[];s.o.push(c);
+ if(s.o.length===2){const[a,b]=s.o;if(s.c[a]===s.c[b]){s.m[a]=s.m[b]=1;s.sc[s.turn]++;s.o=[];if(s.m.every(v=>v))s.over={w:win(s.sc)}}else{s.sh=[a,b];s.o=[];s.turn=nxt(r,s.turn)}}}
+function cMove(r,m){if(r.g==="ttt")return tMove(r,m);if(r.g==="mem")return mMove(r,m);const s=r.st,c=+m.c;if(s.over||!(c>=0&&c<7)||!who(r,m.id))return;let rw=5;while(rw>=0&&s.g[rw*7+c]>=0)rw--;if(rw<0)return;
  s.g[rw*7+c]=s.turn;s.last=rw*7+c;const at=(a,b)=>a>=0&&a<6&&b>=0&&b<7?s.g[a*7+b]:-2;let w=0;
  for(const[dr,dc]of[[0,1],[1,0],[1,1],[1,-1]]){let n=1;for(const sg of[1,-1])for(let k=1;k<4&&at(rw+dr*k*sg,c+dc*k*sg)===s.turn;k++)n++;if(n>=4)w=1}
  if(w)s.over={w:s.turn};else if(s.g.every(v=>v>=0))s.over={w:-1};else s.turn^=1}
 function gGot(m){if(GM.seen[m.k]||Date.now()-m.ts>18e5)return;GM.seen[m.k]=1;let r=GM.rooms[m.r];
- if(m.op==="new"){if(r||!GG[m.g])return;r=GM.rooms[m.r]={r:m.r,g:m.g,e:0,players:[{id:m.id,n:m.n}],seq:0,buf:{},q:[],busy:0,st:gInit(m.g,0),ts:m.ts}}
+ if(m.op==="new"){if(r||!GG[m.g])return;r=GM.rooms[m.r]={r:m.r,g:m.g,e:0,players:[{id:m.id,n:m.n}],seq:0,buf:{},q:[],busy:0,st:gInit(m.g,0,m.r),ts:m.ts}}
  else if(!r)return;
- else if(m.op==="join"){if(r.players.length>1||r.players.some(p=>p.id===m.id))return;r.players.push({id:m.id,n:m.n});if(r.players[0].id===cxId){toast("🎉 "+m.n+" joined your table!");sfx("ok")}}
- else if(m.op==="lv"){const i=r.players.findIndex(p=>p.id===m.id);if(i<0)return;if(r.players.length<2){delete GM.rooms[m.r];if(GM.cur===m.r)GM.cur=null}else if(!r.st.over){r.st.over={w:i^1,left:1};r.q=[];r.busy=0}}
- else if(m.op==="rm"){if(m.e!==r.e+1)return;r.e=m.e;r.st=gInit(r.g,r.e);r.seq=0;r.buf={};r.q=[];r.busy=0}
+ else if(m.op==="join"){const ex=r.players.find(p=>p.id===m.id);if(ex)ex.x=0;else{if(r.players.length>=8)return;r.players.push({id:m.id,n:m.n});if(r.st.sc&&r.st.sc.length<r.players.length)r.st.sc.push(0);if(r.players[0].id===cxId&&m.id!==cxId){toast("🎉 "+m.n+" joined your table!");sfx("ok")}}}
+ else if(m.op==="lv"){const i=r.players.findIndex(p=>p.id===m.id);if(i<0)return;if(r.players.length<2){delete GM.rooms[m.r];if(GM.cur===m.r)GM.cur=null}else{r.players[i].x=1;const ac=r.players.filter(p=>!p.x);if(!ac.length){delete GM.rooms[m.r];if(GM.cur===m.r)GM.cur=null}else if(!r.st.over){if(TEAM[r.g]){const t=k=>r.players.some((p,j)=>!p.x&&j%2===k);if(!t(0)||!t(1))r.st.over={w:t(0)?0:1,left:1}}else if(ac.length<2)r.st.over={w:r.players.indexOf(ac[0]),left:1};else if(r.st.turn===i&&!r.busy&&!r.q.length)r.st.turn=nxt(r,i);if(r.st.over){r.q=[];r.busy=0}}}}
+ else if(m.op==="rm"){if(m.e!==r.e+1)return;r.e=m.e;r.st=gInit(r.g,r.e,r.r,r.players.length);r.seq=0;r.buf={};r.q=[];r.busy=0}
  else if(m.op==="mv"){if(m.e!==r.e||r.st.over||r.players.length<2)return;r.buf[m.s]=m;while(r.buf[r.seq+1]){const q=r.buf[r.seq+1];delete r.buf[r.seq+1];r.seq++;if(r.g==="pool")r.q.push([q.vx,q.vy]);else cMove(r,q)}}
  r.ts=Math.max(r.ts||0,m.ts);gRun();gUI()}
 function gPost(o){if(!cxId)return;const m=Object.assign({t:"gr",k:cxId+Date.now().toString(36)+Math.random().toString(36).slice(2,5),ts:Date.now(),id:cxId,n:cxName},o);cxPost("game",m).catch(cxFail);gGot(m)}
@@ -479,7 +493,7 @@ function gLoop(){GM.raf=0;let any=0;const cl=v=>Math.max(-3.2,Math.min(3.2,+v||0
   if(r.busy){let mv=1;for(let i=0;i<4&&mv;i++)mv=pStep(r.st);if(!mv){r.busy=0;pEnd(r);if(GM.cur===r.r)gUI()}}
   if(r.busy||r.q.length)any=1}
  pDraw();if(any)GM.raf=requestAnimationFrame(gLoop)}
-function gMyTurn(r){r=r||GM.rooms[GM.cur];return !!r&&r.players.length===2&&!r.st.over&&!r.busy&&!r.q.length&&r.players[r.st.turn].id===cxId}
+function gMyTurn(r){r=r||GM.rooms[GM.cur];return !!r&&r.players.length>=2&&!r.st.over&&!r.busy&&!r.q.length&&who(r,cxId)}
 function pDraw(){const cv=$("#gcv"),r=GM.cur&&GM.rooms[GM.cur];if(!cv||!r||r.g!=="pool")return;const x=cv.getContext("2d"),s=r.st;
  x.clearRect(0,0,PW,PH);x.fillStyle="#1f8f4e";x.fillRect(0,0,PW,PH);x.fillStyle="#0a0a0a";PK.forEach(k=>{x.beginPath();x.arc(k[0],k[1],17,0,7);x.fill()});
  s.b.forEach((q,i)=>{if(!q[2])return;x.beginPath();x.arc(q[0],q[1],PR,0,7);x.fillStyle=PC[i];x.fill();if(i){x.fillStyle="rgba(255,255,255,.9)";x.beginPath();x.arc(q[0],q[1],4.6,0,7);x.fill();x.fillStyle="#111";x.font="bold 7px sans-serif";x.textAlign="center";x.textBaseline="middle";x.fillText(i,q[0],q[1]+.5)}});
@@ -491,19 +505,23 @@ function pPtr(){const cv=$("#gcv");if(!cv)return;const pt=e=>{const q=cv.getBoun
  cv.onpointerup=cv.onpointercancel=e=>{const a=GM.aim,r=GM.rooms[GM.cur];GM.d=null;GM.aim=null;
   if(a&&r&&a.p>.08&&e.type==="pointerup"&&gMyTurn(r))gPost({op:"mv",r:r.r,e:r.e,s:r.seq+1,vx:+(a.ux*3.2*a.p).toFixed(3),vy:+(a.uy*3.2*a.p).toFixed(3)});pDraw()}}
 function gLobbyH(){const now=Date.now(),R=Object.values(GM.rooms).filter(r=>now-r.ts<18e5&&(!r.st.over||r.players.some(p=>p.id===cxId))).sort((a,b)=>b.ts-a.ts);
- let h=`<div class="card"><b>🎮 Play together</b><div class="sub" style="margin:4px 0 10px">Host a table, then your friends join from this tab. Great for bonding between quests!</div><div class="gg">${Object.entries(GG).map(([k,v])=>`<button class="gb" data-gn="${k}"><span>${v.i}</span><b>${v.n}</b><small>${v.d}</small></button>`).join("")}</div></div>`;
- return h+`<div class="card"><b>Tables</b>`+(R.length?R.map(r=>{const mine=r.players.some(p=>p.id===cxId),full=r.players.length>1;return`<div class="pl"><span style="font-size:24px">${GG[r.g].i}</span><div class="sp"><b>${GG[r.g].n}</b><div class="sub">${r.players.map(p=>esc(p.n)).join(" vs ")}${full?"":" · waiting for a friend"}${r.st.over?" · finished":""}</div></div><button class="pri" data-gj="${r.r}">${mine?"Rejoin":full?"Watch":"Join"}</button></div>`}).join(""):`<div class="sub" style="margin-top:6px">No tables yet — host one above 👆</div>`)+`</div>`}
-function gRoomH(r){const g=GG[r.g],s=r.st,P=r.players,mi=P.findIndex(p=>p.id===cxId),my=gMyTurn(r),nm=i=>P[i]?esc(P[i].n.split(" ")[0]):"…";
- const stt=P.length<2?"⏳ Waiting for a friend to join…":s.over?(s.over.w>=0?`🏆 ${nm(s.over.w)} wins!${s.over.left?" (opponent left)":""}`:"🤝 It's a draw!"):my?"🎯 Your turn!":`⌛ ${nm(s.turn)}'s turn`;
- let h=`<div class="card"><div class="row"><b>${g.i} ${g.n}</b><span class="sp"></span><button class="pri" data-gl>← Leave</button></div><div class="gps">${[0,1].map(i=>`<div class="gpc ${P[i]&&s.turn===i&&!s.over?"t":""}">${nm(i)}${P[i]&&P[i].id===cxId?" (you)":""}<br><b>${r.g==="pool"?s.sc[i]+" pts":(i?"🟡":"🔴")}</b></div>`).join("")}</div><div class="gst">${stt}</div>`;
+ let h=`<div class="card"><b>🎮 Play together</b><div class="sub" style="margin:4px 0 10px">Host a table, then anyone can join from this tab (up to 8). Great for bonding between quests!</div><div class="gg">${Object.entries(GG).map(([k,v])=>`<button class="gb" data-gn="${k}"><span>${v.i}</span><b>${v.n}</b><small>${v.d}</small></button>`).join("")}</div></div>`;
+ return h+`<div class="card"><b>Tables</b>`+(R.length?R.map(r=>{const mine=r.players.some(p=>p.id===cxId),full=r.players.length>=8||!!r.st.over;return`<div class="pl"><span style="font-size:24px">${GG[r.g].i}</span><div class="sp"><b>${GG[r.g].n}</b><div class="sub">${r.players.map(p=>esc(p.n)).join(", ")}${r.players.length<2?" · waiting for friends":""}${r.st.over?" · finished":""}</div></div><button class="pri" data-gj="${r.r}">${mine?"Rejoin":full?"Watch":"Join"}</button></div>`}).join(""):`<div class="sub" style="margin-top:6px">No tables yet — host one above 👆</div>`)+`</div>`}
+function gRoomH(r){const g=GG[r.g],s=r.st,P=r.players,mi=P.findIndex(p=>p.id===cxId&&!p.x),my=gMyTurn(r),T=!!TEAM[r.g],tn=k=>r.g==="c4"?(k?"🟡":"🔴"):(k?"⭕":"❌"),nm=i=>P[i]?esc(P[i].n.split(" ")[0]):"…";
+ const stt=P.length<2?"⏳ Waiting for friends to join…":s.over?(s.over.w>=0?`🏆 ${T?tn(s.over.w)+" Team":nm(s.over.w)} wins!${s.over.left?" (others left)":""}`:"🤝 It's a draw!"):my?"🎯 Your turn!":T?`⌛ ${tn(s.turn)} Team's turn`:`⌛ ${nm(s.turn)}'s turn`;
+ const cs=T?[0,1].map(k=>({t:tn(k)+" Team",b:P.filter((p,i)=>i%2===k&&!p.x).map(p=>esc(p.n.split(" ")[0])+(p.id===cxId?" (you)":"")).join(", ")||"—",on:s.turn===k})):P.map((p,i)=>({t:nm(i)+(p.id===cxId?" (you)":"")+(p.x?" 🚪":""),b:s.sc?s.sc[i]+" pts":"",on:s.turn===i&&!p.x}));
+ let h=`<div class="card"><div class="row"><b>${g.i} ${g.n}</b><span class="sp"></span><button class="pri" data-gl>← Leave</button></div><div class="gps">${cs.map(c=>`<div class="gpc ${c.on&&!s.over?"t":""}">${c.t}<br><b>${c.b}</b></div>`).join("")}</div><div class="gst">${stt}</div>`;
  if(r.g==="pool")h+=`<div class="gt"><canvas id="gcv" width="600" height="300"></canvas></div><div class="sub" style="margin-top:6px">${mi<0?"👀 You're watching. ":""}Drag back from anywhere on the table and let go to shoot — the further you pull, the harder the shot. Pot a ball to keep your turn!</div>`;
+ else if(r.g==="ttt")h+=`<div class="tt">${s.g.map((v,c)=>`<button data-c4="${c}" ${my&&v<0?"":"disabled"} class="${s.last===c?"l":""}">${v<0?"":v?"⭕":"❌"}</button>`).join("")}</div>${mi<0?'<div class="sub" style="margin-top:6px">👀 You\'re watching.</div>':""}`;
+ else if(r.g==="mem")h+=`<div class="mm">${s.c.map((e,c)=>{const up=s.m[c]||s.o.includes(c)||s.sh.includes(c);return`<button data-c4="${c}" ${my&&!up?"":"disabled"} class="${s.m[c]?"ok":up?"up":""}">${up?e:"❓"}</button>`}).join("")}</div><div class="sub" style="margin-top:6px">${mi<0?"👀 You're watching. ":""}Flip two cards. Match a pair to keep your turn!</div>`;
  else h+=`<div class="c4">${[0,1,2,3,4,5,6].map(c=>`<button class="c4c" data-c4="${c}" ${my?"":"disabled"}>${[0,1,2,3,4,5].map(w=>{const v=s.g[w*7+c];return`<i class="${v<0?"":v?"y":"r"}${s.last===w*7+c?" l":""}"></i>`}).join("")}</button>`).join("")}</div>${mi<0?'<div class="sub" style="margin-top:6px">👀 You\'re watching.</div>':""}`;
- if(P.length<2&&mi===0)h+=`<button class="pri" data-gi style="margin-top:10px;width:100%">📣 Invite the team in chat</button>`;
+ if(mi<0&&!s.over&&P.length<8)h+=`<button class="pri" data-gj="${r.r}" style="margin-top:10px;width:100%">🙋 Join this table</button>`;
+ if(mi>=0&&!s.over)h+=`<button class="pri" data-gi style="margin-top:10px;width:100%">📣 Invite the team in chat</button>`;
  if(s.over&&mi>=0)h+=`<button class="pri" data-gr style="margin-top:10px;width:100%">🔁 Rematch</button>`;
  return h+`</div>`}
 function gBind(){const on=(q,f)=>document.querySelectorAll("#gx "+q).forEach(f);
  on("[data-gn]",b=>b.onclick=()=>{const r=Math.random().toString(36).slice(2,8);gPost({op:"new",r,g:b.dataset.gn});GM.cur=r;gUI();toast("Table ready — invite your friends! 🎉")});
- on("[data-gj]",b=>b.onclick=()=>{const r=GM.rooms[b.dataset.gj];if(!r)return;if(r.players.length<2&&!r.players.some(p=>p.id===cxId))gPost({op:"join",r:r.r});GM.cur=r.r;gUI()});
+ on("[data-gj]",b=>b.onclick=()=>{const r=GM.rooms[b.dataset.gj];if(!r)return;{const q=r.players.find(p=>p.id===cxId);if((!q||q.x)&&!r.st.over&&(q||r.players.length<8))gPost({op:"join",r:r.r})}GM.cur=r.r;gUI()});
  on("[data-gl]",b=>b.onclick=()=>{const r=GM.rooms[GM.cur];if(r&&r.players.some(p=>p.id===cxId)&&!r.st.over)gPost({op:"lv",r:r.r});GM.cur=null;gUI()});
  on("[data-gr]",b=>b.onclick=()=>{const r=GM.rooms[GM.cur];if(r)gPost({op:"rm",r:r.r,e:r.e+1})});
  on("[data-gi]",b=>b.onclick=()=>{const r=GM.rooms[GM.cur];if(!r)return;const m=cxMk(`${GG[r.g].i} ${cxName} is hosting ${GG[r.g].n} — join in the 🎮 Games tab!`);cxAdd(m,true);cxPost("chat",m).catch(cxFail);toast("Invite sent to the team chat ✅")});
