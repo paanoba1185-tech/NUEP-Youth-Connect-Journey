@@ -142,6 +142,7 @@ svg.gm{width:var(--z);height:var(--z)}
 .c4{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;background:#1d4ed8;padding:6px;border-radius:12px;border:3px solid #1e3a8a}
 .c4c{display:flex;flex-direction:column;gap:4px;padding:0;border:0;background:none}
 .c4c i{display:block;aspect-ratio:1;border-radius:50%;background:#e8eefc}.c4c i.r{background:#e63946}.c4c i.y{background:#ffd23f}.c4c i.l{box-shadow:0 0 0 3px #fff}
+.fr{margin:10px 16px;border-radius:12px;overflow:hidden;border:1px solid var(--line);background:var(--card)}.frh{background:linear-gradient(#1e88e5,#1565c0);color:#fff;font-weight:700;padding:8px 12px}.frb{padding:12px}.t8{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.t8 button{border:0;background:none;color:var(--ink);font:inherit;font-size:11px;text-align:center;padding:0}.t8 .av{width:100%;height:auto;aspect-ratio:1;border-radius:10px;font-size:22px}.frbig .av{width:96px;height:96px;font-size:40px;border-radius:12px}
 </style></head><body>
 <header><h1>🧭 NUEP Youth Connect · Season 3</h1><div class="sub">Journey Across the Philippines · Batanes to Mt. Apo</div></header>
 <main id="app"></main>
@@ -282,7 +283,7 @@ function view(){
   if(c===0)h+=`<p class="sub" style="text-align:center">Quests open Dec 7, 2026 – ${Math.max(0,Math.ceil((START-Date.now())/864e5))} days to go! 🎒</p>`;
   QUESTS.forEach((q,i)=>{const t=master?"button":"div";h+=`<${t} class="q ${a[i]?"done":""}" ${master?`data-q="${i}"`:""}><span class="dot" style="background:${q.c}"></span><span><b>${q.n}</b>${wk===c&&TQ===i?' <span class="live">LIVE</span>':""}<br><span class="sub">${q.d}</span></span><span class="chk">${a[i]?"✅":"⬜"}</span></${t}>`});
   return h+`<div class="sub">Complete a quest = 1 step. All 4 on time = +1 bonus step (max 5 per week).${master?"":" Your guide updates your progress."}</div></div>`}
- if(tab==="games")return'<div id="gx"></div>';
+ if(tab==="friends")return frView();if(tab==="games")return'<div id="gx"></div>';
  if(tab==="hero")return heroView();
  if(tab==="gems"){const X=(master||viewer)?players[mp]:me;if(!X)return"";const s=steps(X),jk=X.jk||0;let h=((master||viewer)?pickSel():"")+header(X)+`<div class="card"><b>Quest for the Crown 👑</b><div class="sub" style="margin-bottom:10px">Collect all four magical crystals to unlock the crown.</div><div class="grid" style="grid-template-columns:repeat(2,1fr)">`;
   CR.forEach(c=>{const g=cryHas(X,c);h+=`<div class="cr ${g?"":"lock"}"><span class="gem">${gem(c,84)}</span><b>${c.n}</b><br>${c.p}<br><span class="sub">${g?"Collected ✅":c.at+" steps"}</span></div>`});
@@ -301,8 +302,8 @@ function view(){
 function render(){
  if(!me&&!master&&!viewer){$("#app").innerHTML=pickHTML(list());$("#nav").innerHTML="";const a0=$("#adm0");if(a0)a0.onclick=e=>{e.preventDefault();$("#pbox").style.display="block"};const p0=$("#pgo0");if(p0)p0.onclick=()=>{const r=roleOf($("#pin0").value);if(r)setRole(r);else toast("Wrong PIN")};
  document.querySelectorAll("[data-pick]").forEach(b=>b.onclick=()=>{uid=b.dataset.pick;try{localStorage.setItem("nuep_me",uid)}catch(e){}me=players[uid];render()});return}
- $("#app").innerHTML=`<div class="wood">${{map:"🗺️ Adventure Map",hero:"🦸 Your Hero",quest:"📜 Quests",gems:"💎 Gems Collection",team:"👥 Our Adventurers",games:"🎮 Game Room"}[tab]}</div>`+(master?statusBar():"")+view();hdr();setTimeout(checkCelebrate,60);
- $("#nav").innerHTML=[["map","🗺️","Map"],["hero","🦸","Hero"],["quest","📅","Quests"],["gems","💎","Crystals"],["team","👥","Team"],["games","🎮","Games"]].map(t=>`<button data-t="${t[0]}" class="${tab===t[0]?"on":""}"><b>${t[1]}</b>${t[2]}</button>`).join("");
+ $("#app").innerHTML=`<div class="wood">${{map:"🗺️ Adventure Map",hero:"🦸 Your Hero",quest:"📜 Quests",gems:"💎 Gems Collection",team:"👥 Our Adventurers",games:"🎮 Game Room",friends:"👯 Friends"}[tab]}</div>`+(master?statusBar():"")+view();hdr();setTimeout(checkCelebrate,60);
+ $("#nav").innerHTML=[["map","🗺️","Map"],["hero","🦸","Hero"],["quest","📅","Quests"],["gems","💎","Crystals"],["team","👥","Team"],["games","🎮","Games"],["friends","👯","Friends"]].map(t=>`<button data-t="${t[0]}" class="${tab===t[0]?"on":""}"><b>${t[1]}</b>${t[2]}</button>`).join("");
  const on=(q,f)=>document.querySelectorAll(q).forEach(f);
  on("[data-t]",b=>b.onclick=()=>{tab=b.dataset.t;sfx(tab==="map"?"map":"whoosh");render();scrollTo(0,0)});
  on("[data-w]",b=>b.onclick=()=>{wk=Math.max(1,Math.min(WEEKS,wk+ +b.dataset.w));render()});
@@ -324,7 +325,7 @@ function render(){
  const sw=$("#sw");if(sw)sw.onclick=e=>{e.preventDefault();try{localStorage.removeItem("nuep_me")}catch(x){}uid=null;me=null;render()};
  const hv=$("#hv");if(hv)hv.onclick=e=>{e.preventDefault();open=open==="code"?"":"code";render()};
  const gm=$("#gm");if(gm)gm.onclick=e=>{e.preventDefault();if(master||viewer){master=false;viewer=false;try{localStorage.removeItem("nuep_master")}catch(x){}if(!me)uid=null;render()}else{open=open==="pin"?"":"pin";render()}};
- const ca=$("#capply");if(ca)ca.onclick=()=>{let v=$("#cin").value.trim();const m=v.match(/d=([^&\s]+)/);if(m)v=m[1];const o=dec(v);if(!o){toast("That code doesn’t look right");return}apply(o);LASTT=Math.max(LASTT,o.t||0);keep(v);open="";toast("Progress updated ✅");render()};
+ const ca=$("#capply");if(ca)ca.onclick=()=>{let v=$("#cin").value.trim();const m=v.match(/d=([^&\s]+)/);if(m)v=m[1];if(frApply(v)){open="";render();return}const o=dec(v);if(!o){toast("That code doesn’t look right");return}apply(o);LASTT=Math.max(LASTT,o.t||0);keep(v);open="";toast("Progress updated ✅");render()};
  const pg=$("#pgo");if(pg)pg.onclick=()=>{const r=roleOf($("#pin").value);if(r)setRole(r);else toast("Wrong PIN")};
  on("[data-p]",g=>g.onclick=()=>{sfx("steps");const q=players[g.dataset.p];if(!q)return;const s=steps(q);$("#info").innerHTML=`<b>${esc(q.name)}</b>${g.dataset.p===uid?' <span class="tag">you</span>':""}<div class="sub">${s} steps · ${cryS(q)} ${cryP(q).length}/4 crystals · ${loc(s)}</div>`});
  on("[data-d]",g=>g.onclick=()=>{sfx("whoosh");const d=D[+g.dataset.d],n=list().filter(q=>q.s>=d.at).length;$("#info").innerHTML=`<b>${d.ms?gem(CR[d.ms-1],18):"📍"} ${esc(d.name)}</b><div class="sub">${d.ms?(d.ms===4?"🏆 Grand Finale · Golden Crystal 💛 + the Crown 👑":"⭐ Milestone "+d.ms+" · "+CR[d.ms-1].n+" "+gem(CR[d.ms-1],16)+" · reward 🎁"):"Destination "+(d.i+1)} · unlocks at ${d.at} steps · ${n} adventurer${n===1?"":"s"} have arrived</div>`})}
@@ -535,4 +536,96 @@ const MA=new Audio("data:audio/mp4;base64,AAAAHGZ0eXBNNEEgAAACAE00QSBpc29taXNvMg
 function music(){if(!musOn)return;const p=MA.play();if(p&&p.catch)p.catch(()=>{})}
 function stopMus(){MA.pause()}
 document.addEventListener("visibilitychange",()=>{if(document.hidden)MA.pause();else if(musOn)music()});
-</script></body></html>
+</script><script>
+(function(){
+const E=()=>({t:0,bio:{},mot:{},top:{},tt:{},pt:{},ph:{},pk:{},pp:{},pa:{},dl:[],tm:[],sh:[]});let FR=E(),frp=null,frE=false,frD={},frT={},lastTm=0,lastPoll=0;
+try{const s=JSON.parse(localStorage.getItem("nuep_fr")||"null");if(s&&s.t!==undefined)FR=Object.assign(E(),s)}catch(e){}
+const lid=t=>t.i||("o"+(t.to+t.by+t.ts).split("").reduce((a,c)=>(a*31+c.charCodeAt(0))>>>0,7).toString(36));
+const okp=(id,h)=>!FR.ph[id]||h===FR.ph[id],oka=h=>!FR.ph._a||h===FR.ph._a;
+const pins=()=>{try{return JSON.parse(localStorage.getItem("nuep_frpins")||"{}")}catch(e){return{}}};
+let pq=0;const setPin=(id,p)=>{if(!FR.ph._a)FR.ph._a=hs("a:"+mid());const ts=Date.now(),h=hs(id+":"+p);FR.ph[id]=h;FR.pk[id]="a";FR.pp[id]=ts;FR.pa[id]=ts;const a=pins();a[id]=p;try{localStorage.setItem("nuep_frpins",JSON.stringify(a))}catch(e){}setTimeout(()=>post({k:"apin",id,h,ts,ha:FR.ph._a}),(pq++%40)*800)};
+const rp=()=>String(Math.floor(100000+Math.random()*900000));
+const AUTH=()=>{if(master)return true;try{return !!(uid&&FR.ph[uid]&&localStorage.getItem("nuep_frok_"+uid)===FR.ph[uid])}catch(e){return false}};
+const HH=id=>master?FR.ph._a:FR.ph[id];
+const mid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+FR.tm.forEach(t=>t.i=lid(t));
+const post=o=>{try{cxPost("fr",o).catch(()=>{})}catch(e){}};
+function mergeMsg(m,T){if(!m||typeof m!=="object")return false;
+ if(m.k==="t8"&&players[m.id]&&(T||okp(m.id,m.h)||oka(m.h))&&Array.isArray(m.a)&&(m.ts||0)>(FR.tt[m.id]||0)){FR.top[m.id]=m.a.filter(x=>players[x]&&x!==m.id).slice(0,8);FR.tt[m.id]=m.ts;return true}
+ if(m.k==="tm"&&m.i&&(T||(m.by==="NUEP Team"?oka(m.h):(!players[slug(String(m.by))]||okp(slug(String(m.by)),m.h))))&&players[m.to]&&typeof m.x==="string"&&!FR.dl.includes(m.i)&&!FR.tm.some(t=>t.i===m.i)){FR.tm.push({i:m.i,h:m.h,to:m.to,by:String(m.by||"").slice(0,30),x:m.x.slice(0,200),ts:m.ts||Date.now()});return true}
+ if(m.k==="pf"&&players[m.id]&&(T||okp(m.id,m.h)||oka(m.h))&&(m.ts||0)>(FR.pt[m.id]||0)){FR.mot[m.id]=String(m.mot||"").slice(0,60);FR.bio[m.id]=String(m.bio||"").slice(0,300);FR.pt[m.id]=m.ts;return true}
+ if(m.k==="pin"&&players[m.id]&&typeof m.h==="string"&&m.h&&(m.ts||0)>(FR.pa[m.id]||0)&&(!FR.ph[m.id]||(FR.pk[m.id]==="c"&&m.ts<FR.pp[m.id]))){FR.ph[m.id]=m.h;FR.pk[m.id]="c";FR.pp[m.id]=m.ts;return true}
+ if(m.k==="apin"&&players[m.id]&&(T||(FR.ph._a&&m.ha===FR.ph._a))&&(m.ts||0)>(FR.pa[m.id]||0)){FR.pa[m.id]=m.ts;if(m.h){FR.ph[m.id]=m.h;FR.pk[m.id]="a";FR.pp[m.id]=m.ts}else{delete FR.ph[m.id];delete FR.pk[m.id];delete FR.pp[m.id]}return true}
+ if(m.k==="del"&&m.i&&(T||(m.w==="admin"?oka(m.h):(players[m.w]&&okp(m.w,m.h))))){const t=FR.tm.find(t=>t.i===m.i);if(!T&&t&&!(m.w==="admin"||m.w===slug(t.by)||m.w===t.to))return false;if(!FR.dl.includes(m.i))FR.dl.push(m.i);FR.tm=FR.tm.filter(t=>t.i!==m.i);return true}
+ return false}
+function heal(ids,tops,pts){let n=0;const go=o=>{if(n++<5)setTimeout(()=>post(o),n*1500+Math.random()*3000)};FR.tm.forEach(t=>{if(!ids.has(t.i))go({k:"tm",i:t.i,h:t.h,to:t.to,by:t.by,x:t.x,ts:t.ts})});for(const id in FR.pt)if((pts[id]||0)<FR.pt[id])go({k:"pf",id,h:FR.ph[id],mot:FR.mot[id]||"",bio:FR.bio[id]||"",ts:FR.pt[id]});for(const id in FR.top)if(FR.tt[id]&&(tops[id]||0)<FR.tt[id])go({k:"t8",id,h:FR.ph[id],a:FR.top[id],ts:FR.tt[id]})}
+function poll(h){lastPoll=Date.now();fetch(cxUrl("fr")+"/json?poll=1&since=12h").then(r=>r.text()).then(t=>{let ch=false;const ids=new Set(),tops={},pts={};t.split("\n").forEach(l=>{try{const o=JSON.parse(l);if(o.event==="message"){const m=JSON.parse(o.message);if(m.i)ids.add(m.i);if(m.k==="pf")pts[m.id]=Math.max(pts[m.id]||0,m.ts||0);if(m.k==="t8")tops[m.id]=Math.max(tops[m.id]||0,m.ts||0);if(mergeMsg(m))ch=true}}catch(e){}});if(ch){put();const a=document.activeElement;if(tab==="friends"&&!(a&&/INPUT|TEXTAREA|SELECT/.test(a.tagName)))render()}if(h)heal(ids,tops,pts)}).catch(()=>{})}
+const put=()=>{try{localStorage.setItem("nuep_fr",JSON.stringify(FR))}catch(e){}};
+const sv=()=>{FR.t=Date.now();put()};
+const b64=o=>btoa(unescape(encodeURIComponent(JSON.stringify(o)))).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
+const unb=s=>{s=s.replace(/-/g,"+").replace(/_/g,"/");while(s.length%4)s+="=";return JSON.parse(decodeURIComponent(escape(atob(s))))};
+window.frApply=function(v){v=String(v||"").trim();const m=v.match(/[#&]f=([^&\s]+)/),c=m?m[1]:(/^F\./.test(v)?v.slice(2):null);if(!c)return false;try{const o=unb(c);if(o){if(o.t>=FR.t){FR.sh=o.sh||[];FR.t=o.t}if(o.ph&&o.ph._a&&!FR.ph._a)FR.ph._a=o.ph._a;new Set([...Object.keys(o.ph||{}),...Object.keys(o.pa||{})]).forEach(id=>{if(id==="_a"||!players[id])return;const oa=(o.pa||{})[id]||0,oh=(o.ph||{})[id];if(oa>(FR.pa[id]||0))mergeMsg({k:"apin",id,h:oh||"",ts:oa},1);else if(oh&&oa===(FR.pa[id]||0)){if((o.pk||{})[id]==="c")mergeMsg({k:"pin",id,h:oh,ts:(o.pp||{})[id]||1});else if(!(o.pk||{})[id]&&!FR.ph[id])mergeMsg({k:"apin",id,h:oh,ts:1},1)}});new Set([...Object.keys(o.mot||{}),...Object.keys(o.bio||{}),...Object.keys(o.pt||{})]).forEach(id=>mergeMsg({k:"pf",id,mot:(o.mot||{})[id]||"",bio:(o.bio||{})[id]||"",ts:(o.pt||{})[id]||1},1));(o.dl||[]).forEach(i=>mergeMsg({k:"del",i,w:"admin"},1));(o.tm||[]).forEach(t=>mergeMsg(Object.assign({k:"tm"},t,{i:lid(t)}),1));for(const id in(o.top||{}))mergeMsg({k:"t8",id,a:o.top[id],ts:(o.tt||{})[id]||1},1);put()}toast("Friends page updated ✅")}catch(e){toast("That code doesn’t look right")}return true};
+const fn=n=>esc(String(n).split(" ")[0]);
+const big=(p,id)=>`<div class="frbig">${avH(p,id)}</div>`;
+function top8(id){if(FR.top[id]&&FR.top[id].length)return FR.top[id].filter(x=>players[x]&&x!==id).slice(0,8);const L=list(),i=L.findIndex(q=>q.id===id);return L.map((q,k)=>[q.id,Math.abs(k-i)]).filter(e=>e[0]!==id).sort((a,b)=>a[1]-b[1]).slice(0,8).map(e=>e[0])}
+const ds=t=>new Date(t).toLocaleDateString([],{month:"short",day:"numeric"});
+function grid(ids){return`<div class="t8">${ids.map(i=>`<button data-fv="${esc(i)}">${avH(players[i],i)}<div>${fn(players[i].name)}</div></button>`).join("")}</div>`}
+function pinCard(){if(master||!uid||!players[uid]||AUTH())return"";return FR.ph[uid]?`<div class="fr"><div class="frh">🔑 Enter your PIN</div><div class="frb"><div class="sub">Enter your personal PIN once to edit your profile and post testimonials. Someone else took your name? Tell your guide and they will reset it.</div><input id="frpin" type="password" inputmode="numeric" placeholder="Your PIN"><button class="pri" id="frpinok">Unlock</button></div></div>`:`<div class="fr"><div class="frh">🔑 Create your PIN</div><div class="frb"><div class="sub">Only you should know it. Make one (4 to 8 numbers) so nobody else can edit your profile. Don't share it!</div><input id="frnp" type="password" inputmode="numeric" maxlength="8" placeholder="New PIN"><input id="frnp2" type="password" inputmode="numeric" maxlength="8" placeholder="Type it again"><button class="pri" id="frcp">Create my PIN</button></div></div>`}
+function pinAdmin(){const P=pins(),L=list();const txt=L.map(q=>q.p.name+" – "+(P[q.id]||(FR.ph[q.id]?"(set on another device)":"(none)"))).join("\n");return`<div class="card"><b>🔑 Participant PINs</b><div class="sub" style="margin:4px 0 10px">Participants can create their own PIN. To stop someone taking another person’s name first, you can make PINs for everyone now and send each one privately.</div><button class="pri" id="frgen">Make PINs</button> <button class="pri" id="frpl" style="background:var(--gold)">Copy list</button><textarea id="frpt" readonly rows="4" style="width:100%;margin-top:10px;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:8px;font-size:12px">${esc(txt)}</textarea></div>`}
+window.frView=function(){
+ const L=list();if(!L.length)return"";
+ if(!frp||!players[frp])frp=null;
+ let h=pinCard();
+ if(!frp&&!frE&&!master&&uid&&players[uid]&&!window.__frHome)frp=uid;
+ if(!frp){
+  h+=`<div class="fr"><div class="frh">📣 Shoutout Board</div><div class="frb">`;
+  const S=FR.sh.slice().reverse().slice(0,12);
+  h+=S.length?S.map((s,i)=>`<div class="pl" style="display:block"><div>${esc(s.x)}</div><div class="sub">${esc(s.by||"Game Master")} · ${ds(s.ts)}${master?` · <a href="#" data-shd="${FR.sh.indexOf(s)}" style="color:var(--accent)">delete</a>`:""}</div></div>`).join(""):'<div class="sub">No shoutouts yet. Check back soon! 🌟</div>';
+  if(master)h+=`<input id="frshx" maxlength="160" placeholder="Post a shoutout to everyone…"><button class="pri" id="frsh">Post shoutout</button>`;
+  h+=`</div></div><div class="fr"><div class="frh">👯 Adventurer Profiles</div><div class="frb">${grid(L.map(q=>q.id))}</div></div>`;
+  if(master)h+=pinAdmin()+`<div class="card"><b>📤 Share Friends page</b><div class="sub" style="margin:4px 0 10px">Profiles, testimonials and shoutouts are shared with a separate link. Copy it and post it in the group after you make changes.</div><button class="pri" id="frlink">Copy Friends link</button> <button class="pri" id="frcode" style="background:var(--gold)">Copy code</button></div>`;
+  else h+=`<div class="sub" style="text-align:center;margin:10px 16px">Open the Friends link from your guide to get the newest profiles. <a href="#" id="frpaste" style="color:var(--accent)">Paste a code</a></div>`;
+  return h}
+ const p=players[frp],s=steps(p),mine=frp===uid,tms=FR.tm.map((t,i)=>[t,i]).filter(e=>e[0].to===frp);
+ h+=`<div class="card" style="margin-bottom:0"><a href="#" id="frback" style="color:var(--accent)">‹ All profiles</a></div><div class="fr"><div class="frh">${esc(p.name)}${mine?" (you)":""}</div><div class="frb"><div class="row" style="align-items:flex-start;gap:14px">${big(p,frp)}<div class="sp"><div class="big" style="font-size:20px">${esc(p.name)}</div><div class="sub">“${esc(FR.mot[frp]||"Ready for the journey!")}”</div><div style="margin-top:6px;font-size:13px">📍 ${loc(s)}<br>👣 ${s}/60 steps<br>💎 ${cryS(p)||"—"}${crown(p)?" 👑":""}</div></div></div></div></div>`;
+ h+=`<div class="fr"><div class="frh">About me</div><div class="frb">${esc(FR.bio[frp]||"This adventurer hasn't written an About Me yet.")}</div></div>`;
+ const t8=top8(frp);h+=`<div class="fr"><div class="frh">⭐ Top ${Math.min(8,t8.length)||8} Friends</div><div class="frb">${t8.length?grid(t8):'<div class="sub">No friends yet.</div>'}</div></div>`;
+ h+=`<div class="fr"><div class="frh">💬 Testimonials (${tms.length})</div><div class="frb">${tms.length?tms.reverse().map(e=>`<div class="pl" style="display:block"><div>${esc(e[0].x)}</div><div class="sub">— ${esc(e[0].by)} · ${ds(e[0].ts)}${(master||mine||(uid&&slug(e[0].by)===uid))?` · <a href="#" data-tmd="${esc(e[0].i)}" style="color:var(--accent)">delete</a>`:""}</div></div>`).join(""):'<div class="sub">No testimonials yet. Be the first! ✍️</div>'}</div></div>`;
+ const AU=AUTH(),me2=uid&&players[uid]?players[uid]:null,can8=master||(mine&&AU),sel=new Set(frT[frp]||FR.top[frp]||[]),ta='width:100%;padding:12px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font:inherit';
+ if(master||(mine&&AU)){const d=frD[frp]||{};h+=`<div class="fr"><div class="frh">✏️ ${mine?"Edit my profile":"Edit profile (game master)"}</div><div class="frb"><input id="frmot" maxlength="60" placeholder="Motto" value="${esc(d.mot!==undefined?d.mot:FR.mot[frp]||"")}"><textarea id="frbio" rows="3" maxlength="300" placeholder="Write about yourself…" style="${ta}">${esc(d.bio!==undefined?d.bio:FR.bio[frp]||"")}</textarea><button class="pri" id="frsave" style="margin-top:10px">Save profile</button></div></div>`}
+ if(can8)h+=`<div class="fr"><div class="frh">⭐ ${mine?"Choose my Top 8":"Choose Top 8 for "+fn(p.name)}</div><div class="frb"><div class="sub" style="margin-bottom:8px">Tap friends to pick up to 8 (${sel.size}/8). Leave empty for automatic.</div><div>${L.filter(q=>q.id!==frp).map(q=>`<button class="bd ${sel.has(q.id)?"":"off"}" data-t8="${esc(q.id)}" style="font:inherit;color:var(--ink)">${fn(q.p.name)}</button>`).join("")}</div><button class="pri" id="frt8s" style="margin-top:10px">Save Top 8</button></div></div>`;
+ if(master||(me2&&!mine&&AU))h+=`<div class="fr"><div class="frh">✍️ Write a testimonial for ${fn(p.name)}</div><div class="frb">${master?`<select id="frby" style="width:100%;padding:10px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font:inherit;margin-bottom:8px"><option>NUEP Team</option>${L.filter(q=>q.id!==frp).map(q=>`<option>${esc(q.p.name)}</option>`).join("")}</select>`:`<div class="sub" style="margin-bottom:8px">Posting as <b>${esc(me2.name)}</b> · be kind 💛 everyone can read it</div>`}<textarea id="frtx" rows="2" maxlength="200" placeholder="Say something nice…" style="${ta}"></textarea><button class="pri" id="frtm" style="margin-top:8px">Post testimonial</button></div></div>`;
+ else if(!me2&&!master)h+=`<div class="sub" style="text-align:center;margin:10px 16px">Choose your name on the Team tab to write testimonials and edit your profile.</div>`;
+ if(master)h+=`<div class="card"><b>🔑 PIN for ${fn(p.name)}:</b> ${pins()[frp]||(FR.ph[frp]?"set on another device":"not set")} <button class="pri" id="frpr" style="padding:6px 12px;margin-left:8px">New PIN</button> <button class="pri" id="frpc" style="padding:6px 12px;background:var(--gold)">Clear PIN</button><div class="sub" style="margin-top:6px">Clear lets the real owner create their own PIN. New PIN gives you one to hand over.</div></div>`;
+ if(master)h+=`<div class="card"><button class="pri" id="frlink">Copy Friends link</button> <button class="pri" id="frcode" style="background:var(--gold)">Copy code</button></div>`;
+ return h};
+const val=id=>{const e=document.getElementById(id);return e?e.value.trim():""};
+document.addEventListener("click",e=>{const t=e.target.closest("[data-fv],[data-t8],[data-tmd],[data-shd],#frsave,#frtm,#frsh,#frt8s,#frlink,#frcode,#frback,#frpaste,#frpinok,#frgen,#frpl,#frpr,#frpc,#frcp");if(!t||tab!=="friends")return;e.preventDefault();
+ const go=()=>{render()},mine=frp===uid&&uid;
+ if(t.dataset.fv){frp=t.dataset.fv;window.__frHome=0;sfx("tap");go();scrollTo(0,0);return}
+ if(t.id==="frback"){frp=null;window.__frHome=1;go();return}
+ if(t.id==="frpaste"){const v=prompt("Paste the Friends link or code");if(v&&!frApply(v))toast("That isn’t a Friends code");go();return}
+ if(t.id==="frlink"){copyText(baseUrl()+"#f="+b64(FR),"Friends link copied ✅");return}
+ if(t.id==="frcode"){copyText("F."+b64(FR),"Friends code copied ✅");return}
+ if(t.id==="frpinok"){const v=val("frpin");if(uid&&FR.ph[uid]&&hs(uid+":"+v)===FR.ph[uid]){try{localStorage.setItem("nuep_frok_"+uid,FR.ph[uid])}catch(e){}toast("Unlocked ✅");sfx("done")}else toast("Wrong PIN");go();return}
+ if(t.id==="frcp"){const a=val("frnp"),b=val("frnp2");if(!uid||FR.ph[uid])return;if(!/^\d{4,8}$/.test(a)){toast("Use 4 to 8 numbers");return}if(a!==b){toast("The two PINs don’t match");return}const m={k:"pin",id:uid,h:hs(uid+":"+a),ts:Date.now()};if(mergeMsg(m)){try{localStorage.setItem("nuep_frok_"+uid,m.h)}catch(e){}put();post(m);toast("PIN created ✅ Remember it!");sfx("done")}else toast("This name already has a PIN. Ask your guide.");go();return}
+ if(t.id==="frpc"&&master){if(!FR.ph._a)FR.ph._a=hs("a:"+mid());const ts=Date.now();mergeMsg({k:"apin",id:frp,h:"",ts},1);const a=pins();delete a[frp];try{localStorage.setItem("nuep_frpins",JSON.stringify(a))}catch(e){}put();post({k:"apin",id:frp,h:"",ts,ha:FR.ph._a});sv();toast("PIN cleared ✅ The owner can create a new one");go();return}
+ if(t.id==="frgen"&&master){if(!FR.ph._a)FR.ph._a=hs("a:"+mid());let n=0;list().forEach(q=>{if(!FR.ph[q.id]){setPin(q.id,rp());n++}});sv();toast(n?"Made "+n+" PINs ✅":"Everyone already has a PIN");go();return}
+ if(t.id==="frpl"&&master){const P=pins();copyText(list().map(q=>q.p.name+" – "+(P[q.id]||"?")).join("\n"),"PIN list copied ✅ Send each privately");return}
+ if(t.id==="frpr"&&master){if(!FR.ph._a)FR.ph._a=hs("a:"+mid());setPin(frp,rp());sv();toast("New PIN made ✅");go();return}
+ if(t.dataset.t8){if(!(master||(mine&&AUTH())))return;const a=(frT[frp]=frT[frp]||(FR.top[frp]||[]).slice()),i=a.indexOf(t.dataset.t8);if(i>=0)a.splice(i,1);else if(a.length<8)a.push(t.dataset.t8);else toast("Top 8 is full");frD[frp]={mot:val("frmot"),bio:val("frbio")};go();return}
+ if(t.id==="frt8s"){if(!(master||(mine&&AUTH())))return;const a=(frT[frp]||FR.top[frp]||[]).slice(),ts=Date.now();FR.top[frp]=a;FR.tt[frp]=ts;delete frT[frp];put();post({k:"t8",id:frp,h:HH(frp),a,ts});toast("Top 8 saved ✅");sfx("done");go();return}
+ if(t.id==="frtm"){const me2=uid&&players[uid],x=val("frtx");if(!master&&!(me2&&AUTH()))return;if(!x){toast("Write something first");return}if(Date.now()-lastTm<15000){toast("Slow down a little 😊");return}lastTm=Date.now();const by=master?(val("frby")||"NUEP Team"):me2.name,m={k:"tm",i:mid(),h:master?(by==="NUEP Team"?FR.ph._a:FR.ph[slug(by)]):FR.ph[uid],to:frp,by,x,ts:Date.now()};mergeMsg(m);put();post(m);toast("Testimonial posted ✅");sfx("done");go();return}
+ if(t.dataset.tmd){if(!AUTH())return;const w=master?"admin":uid,m={k:"del",i:t.dataset.tmd,w,h:master?FR.ph._a:FR.ph[uid]};if(mergeMsg(m)){put();post(m)}go();return}
+ if(t.id==="frsave"){if(!(master||(mine&&AUTH())))return;const m={k:"pf",id:frp,h:HH(frp),mot:val("frmot"),bio:val("frbio"),ts:Date.now()};mergeMsg(m);delete frD[frp];put();post(m);toast("Profile saved ✅");sfx("done");go();return}
+ if(!master)return;
+ if(t.id==="frsh"){const x=val("frshx");if(!x)return;FR.sh.push({x,ts:Date.now()});sv();toast("Shoutout posted 📣");go();return}
+ if(t.dataset.shd){FR.sh.splice(+t.dataset.shd,1);sv();go()}});
+if(/[#&]f=/.test(location.hash))frApply(location.hash);
+addEventListener("hashchange",()=>{if(/[#&]f=/.test(location.hash)){frApply(location.hash);render()}});
+const r1=render;render=function(){r1.apply(this,arguments);if(tab==="friends"&&Date.now()-lastPoll>15000)poll(0)};
+setTimeout(()=>poll(1),2500);setInterval(()=>{if(tab==="friends"&&!document.hidden)poll(0)},20000);
+render();
+})();
+</script>
+</body></html>
