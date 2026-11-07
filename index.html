@@ -546,7 +546,7 @@ const okp=(id,h)=>!FR.ph[id]||h===FR.ph[id],oka=h=>!FR.ph._a||h===FR.ph._a;
 const pins=()=>{try{return JSON.parse(localStorage.getItem("nuep_frpins")||"{}")}catch(e){return{}}};
 let pq=0;const setPin=(id,p)=>{if(!FR.ph._a)FR.ph._a=hs("a:"+mid());const ts=Date.now(),h=hs(id+":"+p);FR.ph[id]=h;FR.pk[id]="a";FR.pp[id]=ts;FR.pa[id]=ts;const a=pins();a[id]=p;try{localStorage.setItem("nuep_frpins",JSON.stringify(a))}catch(e){}setTimeout(()=>post({k:"apin",id,h,ts,ha:FR.ph._a}),(pq++%40)*800)};
 const rp=()=>String(Math.floor(100000+Math.random()*900000));
-const AUTH=()=>{if(master)return true;try{return !!(uid&&FR.ph[uid]&&localStorage.getItem("nuep_frok_"+uid)===FR.ph[uid])}catch(e){return false}};
+const AUTH=()=>{if(master)return true;try{return !!(uid&&FR.ph[uid]&&(window.__ok||{})[uid]===FR.ph[uid])}catch(e){return false}};
 const HH=id=>master?FR.ph._a:FR.ph[id];
 const mid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
 FR.tm.forEach(t=>t.i=lid(t));
@@ -608,8 +608,8 @@ document.addEventListener("click",e=>{const t=e.target.closest("[data-fv],[data-
  if(t.id==="frpaste"){const v=prompt("Paste the Friends link or code");if(v&&!frApply(v))toast("That isn’t a Friends code");go();return}
  if(t.id==="frlink"){copyText(baseUrl()+"#f="+b64(FR),"Friends link copied ✅");return}
  if(t.id==="frcode"){copyText("F."+b64(FR),"Friends code copied ✅");return}
- if(t.id==="frpinok"){const v=val("frpin");if(uid&&FR.ph[uid]&&hs(uid+":"+v)===FR.ph[uid]){try{localStorage.setItem("nuep_frok_"+uid,FR.ph[uid])}catch(e){}toast("Unlocked ✅");sfx("done")}else toast("Wrong PIN");go();return}
- if(t.id==="frcp"){const a=val("frnp"),b=val("frnp2");if(!uid||FR.ph[uid])return;if(!/^\d{4,8}$/.test(a)){toast("Use 4 to 8 numbers");return}if(a!==b){toast("The two PINs don’t match");return}const m={k:"pin",id:uid,h:hs(uid+":"+a),ts:Date.now()};if(mergeMsg(m)){try{localStorage.setItem("nuep_frok_"+uid,m.h)}catch(e){}put();post(m);toast("PIN created ✅ Remember it!");sfx("done")}else toast("This name already has a PIN. Ask your guide.");go();return}
+ if(t.id==="frpinok"){const v=val("frpin");if(uid&&FR.ph[uid]&&hs(uid+":"+v)===FR.ph[uid]){(window.__ok=window.__ok||{})[uid]=FR.ph[uid];toast("Unlocked ✅");sfx("done")}else toast("Wrong PIN");go();return}
+ if(t.id==="frcp"){const a=val("frnp"),b=val("frnp2");if(!uid||FR.ph[uid])return;if(!/^\d{4,8}$/.test(a)){toast("Use 4 to 8 numbers");return}if(a!==b){toast("The two PINs don’t match");return}const m={k:"pin",id:uid,h:hs(uid+":"+a),ts:Date.now()};if(mergeMsg(m)){(window.__ok=window.__ok||{})[uid]=m.h;put();post(m);toast("PIN created ✅ Remember it!");sfx("done")}else toast("This name already has a PIN. Ask your guide.");go();return}
  if(t.id==="frpc"&&master){if(!FR.ph._a)FR.ph._a=hs("a:"+mid());const ts=Date.now();mergeMsg({k:"apin",id:frp,h:"",ts},1);const a=pins();delete a[frp];try{localStorage.setItem("nuep_frpins",JSON.stringify(a))}catch(e){}put();post({k:"apin",id:frp,h:"",ts,ha:FR.ph._a});sv();toast("PIN cleared ✅ The owner can create a new one");go();return}
  if(t.id==="frgen"&&master){if(!FR.ph._a)FR.ph._a=hs("a:"+mid());let n=0;list().forEach(q=>{if(!FR.ph[q.id]){setPin(q.id,rp());n++}});sv();toast(n?"Made "+n+" PINs ✅":"Everyone already has a PIN");go();return}
  if(t.id==="frpl"&&master){const P=pins();copyText(list().map(q=>q.p.name+" – "+(P[q.id]||"?")).join("\n"),"PIN list copied ✅ Send each privately");return}
@@ -649,8 +649,8 @@ document.addEventListener("click",e=>{const t=e.target.closest("#gok,#gsw,#gnm")
  const h=hs(uid+":"+a);
  if(FR.ph[uid]){if(h!==FR.ph[uid]){err("Wrong PIN. Ask your guide if you forgot it.");return}}
  else{if(gM!=="have"&&a!==b2){err("The two PINs don’t match");return}const m={k:"pin",id:uid,h,ts:Date.now()};mergeMsg(m);if(FR.ph[uid]!==h){err("This name already has a PIN. Ask your guide.");return}put();post(m)}
- try{localStorage.setItem("nuep_frok_"+uid,h)}catch(x){}sfx("done");gate();render()});
-const r1=render;render=function(){r1.apply(this,arguments);gate();if(tab==="friends"&&Date.now()-lastPoll>15000)poll(0)};
+ (window.__ok=window.__ok||{})[uid]=h;sfx("done");gate();render()});
+uid=null;me=null;master=false;viewer=false;const r1=render;render=function(){r1.apply(this,arguments);gate();if(tab==="friends"&&Date.now()-lastPoll>15000)poll(0)};
 poll(1).then(()=>{frReady=true;gate()});setTimeout(()=>{frReady=true;gate()},3500);setInterval(()=>{if(tab==="friends"&&!document.hidden)poll(0)},20000);
 render();
 })();
