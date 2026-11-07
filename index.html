@@ -338,7 +338,9 @@ document.body.append(bm,bf);
 const bg=document.createElement("div");bg.id="bg";bg.innerHTML='<i class="sun"></i>'+[8,22,38].map((t,i)=>`<i class="cl" style="top:${t}%;animation-delay:-${i*22}s;font-size:${36+i*10}px">☁️</i>`).join("")+Array.from({length:12},(_,i)=>`<i class="sp" style="left:${(i*8.3+3)%100}%;animation-delay:${i*.8}s;animation-duration:${8+i%4*2}s">✨</i>`).join("")+'<svg class="wv" viewBox="0 0 1200 46" preserveAspectRatio="none"><path d="M0 24Q150 0 300 24T600 24T900 24T1200 24V46H0Z" fill="rgba(255,255,255,.22)"/></svg>';document.body.prepend(bg);
 setInterval(()=>{const e=$(".say");if(e&&me)e.textContent=msg()},7000);
 let seenS=false;try{seenS=sessionStorage.getItem("nuep_splash")==="1"}catch(e){}
-if(!seenS){const sp=document.createElement("div");sp.className="splash";sp.innerHTML='<div><div class="em">🏝️</div><div style="font-weight:700">NUEP YOUTH CONNECT · SEASON 3</div><h1>Adventure Tracker</h1><div>From Batanes to Mt. Apo 🏔️</div><button>▶ Begin the Adventure</button></div>';sp.querySelector("button").onclick=()=>{sp.remove();try{sessionStorage.setItem("nuep_splash","1")}catch(e){}ac();sfx("map");if(musOn)music()};document.body.append(sp)}
+window.showSplash=function(){if(seenS||document.querySelector(".splash")||(window.frGate&&window.frGate()))return;const sp=document.createElement("div");sp.className="splash";sp.innerHTML='<div><div class="em">🏝️</div><div style="font-weight:700">NUEP YOUTH CONNECT · SEASON 3</div><h1>Adventure Tracker</h1><div>From Batanes to Mt. Apo 🏔️</div><button>▶ Begin the Adventure</button></div>';sp.querySelector("button").onclick=()=>{sp.remove();seenS=true;try{sessionStorage.setItem("nuep_splash","1")}catch(e){}ac();sfx("map");if(musOn)music()};document.body.append(sp)};
+{const r0=render;render=function(){r0.apply(this,arguments);if(me||master||viewer)showSplash()}}
+if(me||master||viewer)showSplash();
 document.addEventListener("click",e=>{if(e.target.closest(".sndb"))return;if(e.target.closest("button,label"))sfx("tap");if(musOn&&MA.paused)music()});
 
 /* ===== Team chat: real-time, works on every tab ===== */
@@ -538,7 +540,7 @@ function stopMus(){MA.pause()}
 document.addEventListener("visibilitychange",()=>{if(document.hidden)MA.pause();else if(musOn)music()});
 </script><script>
 (function(){
-const E=()=>({t:0,bio:{},mot:{},top:{},tt:{},pt:{},ph:{},pk:{},pp:{},pa:{},dl:[],tm:[],sh:[]});let FR=E(),frp=null,frE=false,frD={},frT={},lastTm=0,lastPoll=0;
+const E=()=>({t:0,bio:{},mot:{},top:{},tt:{},pt:{},ph:{},pk:{},pp:{},pa:{},dl:[],tm:[],sh:[]});let FR=E(),frp=null,frE=false,frD={},frT={},lastTm=0,lastPoll=0,frReady=false,gM="";
 try{const s=JSON.parse(localStorage.getItem("nuep_fr")||"null");if(s&&s.t!==undefined)FR=Object.assign(E(),s)}catch(e){}
 const lid=t=>t.i||("o"+(t.to+t.by+t.ts).split("").reduce((a,c)=>(a*31+c.charCodeAt(0))>>>0,7).toString(36));
 const okp=(id,h)=>!FR.ph[id]||h===FR.ph[id],oka=h=>!FR.ph._a||h===FR.ph._a;
@@ -559,7 +561,7 @@ function mergeMsg(m,T){if(!m||typeof m!=="object")return false;
  if(m.k==="del"&&m.i&&(T||(m.w==="admin"?oka(m.h):(players[m.w]&&okp(m.w,m.h))))){const t=FR.tm.find(t=>t.i===m.i);if(!T&&t&&!(m.w==="admin"||m.w===slug(t.by)||m.w===t.to))return false;if(!FR.dl.includes(m.i))FR.dl.push(m.i);FR.tm=FR.tm.filter(t=>t.i!==m.i);return true}
  return false}
 function heal(ids,tops,pts){let n=0;const go=o=>{if(n++<5)setTimeout(()=>post(o),n*1500+Math.random()*3000)};FR.tm.forEach(t=>{if(!ids.has(t.i))go({k:"tm",i:t.i,h:t.h,to:t.to,by:t.by,x:t.x,ts:t.ts})});for(const id in FR.pt)if((pts[id]||0)<FR.pt[id])go({k:"pf",id,h:FR.ph[id],mot:FR.mot[id]||"",bio:FR.bio[id]||"",ts:FR.pt[id]});for(const id in FR.top)if(FR.tt[id]&&(tops[id]||0)<FR.tt[id])go({k:"t8",id,h:FR.ph[id],a:FR.top[id],ts:FR.tt[id]})}
-function poll(h){lastPoll=Date.now();fetch(cxUrl("fr")+"/json?poll=1&since=12h").then(r=>r.text()).then(t=>{let ch=false;const ids=new Set(),tops={},pts={};t.split("\n").forEach(l=>{try{const o=JSON.parse(l);if(o.event==="message"){const m=JSON.parse(o.message);if(m.i)ids.add(m.i);if(m.k==="pf")pts[m.id]=Math.max(pts[m.id]||0,m.ts||0);if(m.k==="t8")tops[m.id]=Math.max(tops[m.id]||0,m.ts||0);if(mergeMsg(m))ch=true}}catch(e){}});if(ch){put();const a=document.activeElement;if(tab==="friends"&&!(a&&/INPUT|TEXTAREA|SELECT/.test(a.tagName)))render()}if(h)heal(ids,tops,pts)}).catch(()=>{})}
+function poll(h){lastPoll=Date.now();return fetch(cxUrl("fr")+"/json?poll=1&since=12h").then(r=>r.text()).then(t=>{let ch=false;const ids=new Set(),tops={},pts={};t.split("\n").forEach(l=>{try{const o=JSON.parse(l);if(o.event==="message"){const m=JSON.parse(o.message);if(m.i)ids.add(m.i);if(m.k==="pf")pts[m.id]=Math.max(pts[m.id]||0,m.ts||0);if(m.k==="t8")tops[m.id]=Math.max(tops[m.id]||0,m.ts||0);if(mergeMsg(m))ch=true}}catch(e){}});if(ch){put();const a=document.activeElement;if(tab==="friends"&&!(a&&/INPUT|TEXTAREA|SELECT/.test(a.tagName)))render()}if(h)heal(ids,tops,pts)}).catch(()=>{})}
 const put=()=>{try{localStorage.setItem("nuep_fr",JSON.stringify(FR))}catch(e){}};
 const sv=()=>{FR.t=Date.now();put()};
 const b64=o=>btoa(unescape(encodeURIComponent(JSON.stringify(o)))).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
@@ -623,8 +625,35 @@ document.addEventListener("click",e=>{const t=e.target.closest("[data-fv],[data-
  if(t.dataset.shd){FR.sh.splice(+t.dataset.shd,1);sv();go()}});
 if(/[#&]f=/.test(location.hash))frApply(location.hash);
 addEventListener("hashchange",()=>{if(/[#&]f=/.test(location.hash)){frApply(location.hash);render()}});
-const r1=render;render=function(){r1.apply(this,arguments);if(tab==="friends"&&Date.now()-lastPoll>15000)poll(0)};
-setTimeout(()=>poll(1),2500);setInterval(()=>{if(tab==="friends"&&!document.hidden)poll(0)},20000);
+
+document.head.insertAdjacentHTML("beforeend","<style>#frgate{position:fixed;inset:0;z-index:100;display:grid;place-items:center;padding:20px;overflow:auto;background:linear-gradient(165deg,#6bb7e3,#2f6aa5)}#frgate .frgc{background:var(--card);color:var(--ink);border-radius:20px;padding:22px;max-width:360px;width:100%;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.3)}#frgate input{text-align:center;font-size:20px;letter-spacing:4px}#frgate a{color:var(--accent);font-size:13px}</style>");
+window.frGate=()=>!!(me&&uid&&!master&&!viewer&&!AUTH());
+function gate(){let o=document.getElementById("frgate");
+ if(!frGate()){if(o)o.remove();return}
+ document.querySelectorAll(".splash").forEach(x=>x.remove());
+ const p=players[uid];if(!p)return;
+ const mode=FR.ph[uid]?"enter":(gM||"create"),sig=uid+mode+frReady;
+ if(o&&o.dataset.s===sig)return;
+ if(!o){o=document.createElement("div");o.id="frgate";document.body.append(o)}
+ o.dataset.s=sig;
+ const inp='<input id="gp1" type="password" inputmode="numeric" maxlength="8" placeholder="PIN">';
+ let b;
+ if(!frReady)b='<div class="sub">Checking your profile…</div>';
+ else if(mode==="enter")b='<div class="sub" style="margin:8px 0">Enter your personal PIN to continue.</div>'+inp+'<div id="gerr" class="sub" style="color:#d33;min-height:18px"></div><button class="pri" id="gok">Continue ▶</button><div style="margin-top:10px" class="sub">Forgot it? Ask your guide to reset it.</div>';
+ else if(mode==="have")b='<div class="sub" style="margin:8px 0">Enter the PIN you already made on another phone.</div>'+inp+'<div id="gerr" class="sub" style="color:#d33;min-height:18px"></div><button class="pri" id="gok">Continue ▶</button><div style="margin-top:10px"><a href="#" id="gsw" data-m="create">I need to create a PIN</a></div>';
+ else b='<div class="sub" style="margin:8px 0">Create your own secret PIN (4 to 8 numbers). Only you should know it, and don’t share it!</div>'+inp+'<input id="gp2" type="password" inputmode="numeric" maxlength="8" placeholder="Type it again"><div id="gerr" class="sub" style="color:#d33;min-height:18px"></div><button class="pri" id="gok">Create my PIN ▶</button><div style="margin-top:10px"><a href="#" id="gsw" data-m="have">I already made a PIN on another phone</a></div>';
+ o.innerHTML='<div class="frgc"><div style="font-size:44px">🔑</div><h2 style="margin:4px 0">Hi '+esc(p.name.split(" ")[0])+'!</h2>'+b+'<div style="margin-top:12px"><a href="#" id="gnm">Not you? Go back</a></div></div>'}
+document.addEventListener("click",e=>{const t=e.target.closest("#gok,#gsw,#gnm");if(!t)return;e.preventDefault();
+ if(t.id==="gnm"){try{localStorage.removeItem("nuep_me")}catch(x){}uid=null;me=null;render();return}
+ if(t.id==="gsw"){gM=t.dataset.m;gate();return}
+ const a=val("gp1"),b2=val("gp2"),err=s=>{const m=document.getElementById("gerr");if(m)m.textContent=s};
+ if(!/^\d{4,8}$/.test(a)){err("Use 4 to 8 numbers");return}
+ const h=hs(uid+":"+a);
+ if(FR.ph[uid]){if(h!==FR.ph[uid]){err("Wrong PIN. Ask your guide if you forgot it.");return}}
+ else{if(gM!=="have"&&a!==b2){err("The two PINs don’t match");return}const m={k:"pin",id:uid,h,ts:Date.now()};mergeMsg(m);if(FR.ph[uid]!==h){err("This name already has a PIN. Ask your guide.");return}put();post(m)}
+ try{localStorage.setItem("nuep_frok_"+uid,h)}catch(x){}sfx("done");gate();render();showSplash()});
+const r1=render;render=function(){r1.apply(this,arguments);gate();if(tab==="friends"&&Date.now()-lastPoll>15000)poll(0)};
+poll(1).then(()=>{frReady=true;gate()});setTimeout(()=>{frReady=true;gate()},3500);setInterval(()=>{if(tab==="friends"&&!document.hidden)poll(0)},20000);
 render();
 })();
 </script>
