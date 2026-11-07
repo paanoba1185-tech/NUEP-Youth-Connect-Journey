@@ -655,4 +655,51 @@ poll(1).then(()=>{frReady=true;gate()});setTimeout(()=>{frReady=true;gate()},350
 render();
 })();
 </script>
+<script>
+/* ===== ALWAYS START FROM THE BEGINNING =====
+   Every time someone opens (or comes back to) the link they must go through:
+   1) Adventure Tracker landing page  2) choose avatar  3) enter / create PIN
+   A fresh load already does this. This block covers the case where the phone
+   keeps the page alive in the background (Messenger / Chrome tab) and "resumes" it. */
+(function(){
+ var AWAY_RESET_SECONDS = 5;   /* away longer than this = start over. Set 0 to reset on EVERY return. */
+ var hiddenAt = 0, skipUntil = 0;
+
+ function resetToStart(){
+  try{ localStorage.removeItem("nuep_me"); localStorage.removeItem("nuep_master"); }catch(e){}
+  try{ sessionStorage.removeItem("nuep_splash"); }catch(e){}
+  window.__ok = {};                       /* forget every PIN unlock */
+  uid = null; me = null; master = false; viewer = false;
+  open = ""; delArm = null; tab = "map";
+  try{ mp = Object.keys(players)[0] || null; }catch(e){}
+  document.querySelectorAll(".cel,#frgate,.splash").forEach(function(n){ n.remove(); });
+  window.__sp = 0;                        /* allow the landing page to show again */
+  try{ render(); }catch(e){}              /* draws the avatar picker underneath */
+  try{ showSplash(); }catch(e){}          /* landing page on top */
+  window.scrollTo(0,0);
+ }
+ window.resetToStart = resetToStart;
+
+ /* Opening the Facebook quest link is a normal trip away: don't log them out for it */
+ document.addEventListener("click", function(e){
+  var a = e.target.closest && e.target.closest('a[target="_blank"]');
+  if(a) skipUntil = Date.now() + 15*60*1000;
+ }, true);
+
+ function comeBack(forceFresh){
+  if(document.querySelector(".splash")) return;      /* already at the landing page */
+  if(!forceFresh && Date.now() < skipUntil) return;  /* returning from Facebook */
+  if(!forceFresh && hiddenAt && (Date.now()-hiddenAt) < AWAY_RESET_SECONDS*1000) return;
+  resetToStart();
+ }
+
+ document.addEventListener("visibilitychange", function(){
+  if(document.hidden){ hiddenAt = Date.now(); }
+  else if(hiddenAt){ comeBack(false); hiddenAt = 0; }
+ });
+ /* page restored from the back/forward cache = they had left it */
+ addEventListener("pageshow", function(e){ if(e.persisted) comeBack(true); });
+ addEventListener("pagehide", function(){ hiddenAt = hiddenAt || Date.now(); });
+})();
+</script>
 </body></html>
