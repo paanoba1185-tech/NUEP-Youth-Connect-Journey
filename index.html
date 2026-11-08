@@ -869,7 +869,7 @@ render();
    A fresh load already does this. This block covers the case where the phone
    keeps the page alive in the background (Messenger / Chrome tab) and "resumes" it. */
 (function(){
- var AWAY_RESET_SECONDS = 5;   /* away longer than this = start over. Set 0 to reset on EVERY return. */
+ var AWAY_RESET_SECONDS = 300;   /* away longer than this (5 minutes) = start over / sign in again. Set 0 to reset on EVERY return. */
  var hiddenAt = 0, skipUntil = 0;
 
  function resetToStart(){
@@ -905,7 +905,7 @@ render();
   else if(hiddenAt){ comeBack(false); hiddenAt = 0; }
  });
  /* page restored from the back/forward cache = they had left it */
- addEventListener("pageshow", function(e){ if(e.persisted) comeBack(true); });
+ addEventListener("pageshow", function(e){ if(e.persisted){ comeBack(false); hiddenAt = 0; } });
  addEventListener("pagehide", function(){ hiddenAt = hiddenAt || Date.now(); });
 })();
 </script>
