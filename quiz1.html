@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Don Juan Alvear Quiz</title>
+<style>
+:root{--bg:#faf7f2;--card:#fff;--tx:#2a2420;--mut:#7a6e64;--ac:#8a5a2b;--ok:#2e7d4f;--bad:#b3392f;--bd:#e4dccf;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1c1814;--card:#262019;--tx:#f1eadf;--mut:#a99d90;--ac:#d9a066;--ok:#5fc08a;--bad:#e87c72;--bd:#3a3229}}
+:root[data-theme="dark"]{--bg:#1c1814;--card:#262019;--tx:#f1eadf;--mut:#a99d90;--ac:#d9a066;--ok:#5fc08a;--bad:#e87c72;--bd:#3a3229}
+html,body{margin:0;background:var(--bg);color:var(--tx);font-family:Georgia,'Times New Roman',serif}
+.w{max-width:620px;margin:0 auto;padding:20px 16px 40px}
+h1{font-size:1.5rem;margin:.2em 0}.sub{color:var(--mut);font-family:system-ui,sans-serif;font-size:.9rem}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:16px;margin:14px 0}
+input[type=text]{width:100%;box-sizing:border-box;padding:12px;font-size:1rem;border:1px solid var(--bd);border-radius:8px;background:var(--bg);color:var(--tx);margin:10px 0}
+button{font-family:system-ui,sans-serif;font-size:1rem;padding:12px 18px;border:0;border-radius:8px;background:var(--ac);color:#fff;cursor:pointer;width:100%}
+button:disabled{opacity:.4}
+.q{font-weight:bold;margin-bottom:10px}
+label{display:block;padding:11px 12px;border:1px solid var(--bd);border-radius:8px;margin:7px 0;cursor:pointer;font-family:system-ui,sans-serif;font-size:.95rem}
+label:has(input:checked){border-color:var(--ac);background:color-mix(in srgb,var(--ac) 14%,transparent)}
+label input{margin-right:8px}
+.bar{height:6px;background:var(--bd);border-radius:3px;margin:10px 0}.bar i{display:block;height:100%;background:var(--ac);border-radius:3px}
+.big{font-size:3rem;text-align:center;margin:6px 0}.pass{color:var(--ok)}.fail{color:var(--bad)}
+.c{text-align:center}.rv{font-family:system-ui,sans-serif;font-size:.9rem;margin:10px 0;padding-left:10px;border-left:3px solid var(--bd)}
+table{width:100%;border-collapse:collapse;font-family:system-ui,sans-serif;font-size:.9rem}td,th{text-align:left;padding:6px;border-bottom:1px solid var(--bd)}
+.hide{display:none}
+</style></head><body><div class="w">
+<h1>Don Juan Alvear Quiz</h1>
+<div class="sub">Based on "Ang Simulain ng Pagkakatatag ng UECFI" · 10 questions · Pass: 8/10</div>
+
+<div id="start" class="card">
+ <div><b>Enter your Facebook name</b> exactly as it appears on your Facebook profile. Nicknames or other names are not accepted, and you can only take this quiz once. Each question has 30 seconds, and you cannot go back.</div>
+ <input type="text" id="nm" placeholder="Facebook name" maxlength="60" autocomplete="off">
+ <label style="border:0;padding:4px 0"><input type="checkbox" id="ck">I confirm this is my exact Facebook name.</label>
+ <button id="go" disabled>Start Quiz</button>
+</div>
+
+<div id="quiz" class="hide">
+ <div class="bar"><i id="pb" style="width:0"></i></div>
+ <div class="card"><div id="tm" class="sub" style="font-weight:bold"></div><div class="q" id="qt"></div><div id="ops"></div>
+ <button id="nx" disabled>Next</button></div>
+</div>
+
+<div id="res" class="hide">
+ <div class="card c"><div id="rn" class="sub"></div><div class="big" id="rs"></div><div id="rv" style="font-size:1.3rem;font-weight:bold"></div><div id="sv" class="sub" style="margin-top:10px"></div></div>
+ <div class="hide"><div id="rev"></div></div>
+</div>
+
+</div>
+<script>const Q=[
+{q:"According to the biography sheet of Centro La Perseverancia, in what year was Spiritism registered in the Bureau of Commerce?",o:["1901","1903","1905","1908"],a:2,e:"Founded in 1901, registered in the Bureau of Commerce in 1905. (1903 is the SEC date in another account; 1901 is the founding.)"},
+{q:"What did the KKEP website show for UECFI President General in 1901–1908, compared with the 100th Founding Anniversary directory?",o:["Website: Agustin dela Rosa; directory: no records","Website: no records available; directory: Juan Alvear (1905–1908)","Both listed Juan Alvear from 1901","Both showed 'No records available'"],a:1,e:"The website said 'No records available'; the 100th-year directory listed Juan Alvear 1905–1908."},
+{q:"Which is the correct order of Don Juan Alvear's public offices?",o:["Congressman (1907–1910) → Mayor (1899) → Governor (1910–1912)","Governor → Mayor → Assemblyman","Mayor (1899) → Assemblyman of 3rd District (1907–1910) → Governor of Pangasinan (1910–1912)","Mayor (1910) → Governor (1907) → Assemblyman (1912)"],a:2,e:"Mayor 1899, Assemblyman 1907–1910, Governor 1910–1912."},
+{q:"What did Don Juan Alvear do with the idols in his house after his wife (Panchacola) died despite his prayers?",o:["Donated them to a church","Buried them in his yard","Sold them to fund a school","Gathered and burned them to ashes"],a:3,e:"In frustration he burned all the idols; then the Holy Spirit directed him to organize the Espiritistas."},
+{q:"Which future Philippine president was one of Don Juan's students at San Juan de Letran?",o:["Manuel L. Quezon","Emilio Aguinaldo","Sergio Osmeña","Manuel Roxas"],a:0,e:"Manuel L. Quezon. (Aguinaldo was the Katipunan leader Alvear served under.)"},
+{q:"According to Chrisforo Alvear Ursais, what does the statue of Don Juan hold?",o:["Cane in the left hand, Holy Bible in the right","Cane in the right hand, Holy Bible in the left","Holy Bible in both hands","A scroll in the right hand, a sword in the left"],a:1,e:"Right hand: baston/tungkod; left hand: the Holy Bible."},
+{q:"The 8.9326-hectare titled land of Don Juan partly became the site of which set?",o:["Provincial Capitol, hospital and market","San Fabian College, church and cemetery","Municipal hall, plaza and school","Centro La Perseverancia, library and fishpond"],a:2,e:"Part of the land is where San Fabian's municipal hall, plaza and school stand."},
+{q:"Which doctrine is credited to Bro. Agustin dela Rosa (not to Don Juan Alvear)?",o:["Hacia Dios por la Ciencia y El Amor","Sin caridad no hay salvacion possible","Hacia Dios por Luz, la Ciencia y El Amor","Sisia ed Dios"],a:1,e:"Dela Rosa: 'Sin caridad no hay salvacion possible.' Alvear: 'Hacia Dios por la Ciencia y El Amor.'"},
+{q:"Whose tomb holds the remains of Don Juan Alvear, according to the account?",o:["His own parents, Pedro Alvear and Maria Erfe","His Portuguese wife, Panchacola","Agustin dela Rosa","The parents of Chrisforo Alvear Ursais: Ursais Jr. and Ester Alvear Ursais"],a:3,e:"His remains are in the tomb of Chrisforo's parents, Ursais Jr. and Ester Alvear Ursais."},
+{q:"Which two institutions did Alvear sponsor bills for as assemblyman, per the biography?",o:["University of the Philippines and Philippine General Hospital","University of Santo Tomas and Philippine General Hospital","University of the Philippines and the Provincial Capitol","Jose Rizal College and San Juan de Letran"],a:0,e:"UP and PGH, both in 1908. (The Capitol was built later as governor; Jose Rizal College was a school he founded in San Fabian.)"},
+
+];
+const API="PASTE_YOUR_APPS_SCRIPT_URL_HERE";
+const $=id=>document.getElementById(id);
+let name="",i=0,sel=[],sw=0,inQ=false,T=null,left=0;
+function esc(s){const d=document.createElement('div');d.textContent=String(s);return d.innerHTML}
+document.addEventListener('visibilitychange',()=>{if(document.hidden&&inQ)sw++});
+const chk=()=>$('go').disabled=!($('nm').value.trim().length>=2&&$('ck').checked);$('nm').oninput=chk;$('ck').onchange=chk;
+async function api(q){const r=await fetch(API+"?"+q);return r.json()}
+function blocked(prev){$('start').innerHTML='<b>You have already taken this quiz.</b><div class="sub" style="margin-top:8px">Only one attempt is allowed. Recorded result: '+prev.score+'/10 ('+(prev.passed?'Passed':'Not passed')+')</div>'}
+$('go').onclick=async()=>{name=$('nm').value.trim();$('go').disabled=true;$('go').textContent='Checking\u2026';
+ let prev=null;try{const l=localStorage.getItem('alvearDone');if(l)prev=JSON.parse(l)}catch(e){}
+ if(!prev){try{const r=await api("action=check&name="+encodeURIComponent(name));if(r.taken)prev=r}catch(e){$('go').disabled=false;$('go').textContent='Start Quiz';alert('Cannot connect. Check your internet and try again.');return}}
+ if(prev){blocked(prev);return}
+ Q.forEach(q=>{q.s=q.o.map((t,k)=>({t,k})).sort(()=>Math.random()-.5)});Q.sort(()=>Math.random()-.5);
+ inQ=true;$('start').classList.add('hide');$('quiz').classList.remove('hide');show()};
+function tick(){$('tm').textContent='\u23f1 '+left+'s';if(left<=0){adv();return}left--}
+function startT(){clearInterval(T);left=30;tick();T=setInterval(tick,1000)}
+function adv(){clearInterval(T);const c=document.querySelector('input[name=o]:checked');sel[i]=c?+c.value:-1;if(++i<Q.length)show();else finish()}
+function show(){const q=Q[i];$('qt').textContent=(i+1)+". "+q.q;$('pb').style.width=(i/Q.length*100)+"%";
+ $('ops').innerHTML=q.s.map(x=>`<label><input type="radio" name="o" value="${x.k}">${esc(x.t)}</label>`).join("");startT();
+ $('nx').disabled=true;$('nx').textContent=i==Q.length-1?"Finish":"Next";
+ document.querySelectorAll('input[name=o]').forEach(r=>r.onchange=()=>$('nx').disabled=false)}
+$('nx').onclick=adv;
+async function finish(){inQ=false;clearInterval(T);let s=0;Q.forEach((q,k)=>{if(sel[k]===q.a)s++});const p=s>=8;
+ $('quiz').classList.add('hide');$('res').classList.remove('hide');
+ $('rn').textContent=name;$('rs').textContent=s+" / 10";$('rs').className="big "+(p?"pass":"fail");
+ $('rv').textContent=p?"PASSED \u2713":"NOT PASSED \u2717 (need 8/10)";$('rv').className=p?"pass":"fail";
+ try{localStorage.setItem('alvearDone',JSON.stringify({name,score:s,passed:p}))}catch(e){}
+ $('sv').textContent="Saving your score\u2026";
+ try{const r=await api("action=submit&name="+encodeURIComponent(name)+"&score="+s+"&passed="+(p?1:0)+"&sw="+sw);
+  $('sv').textContent=r.ok?"Score submitted \u2713":"Could not submit. Please screenshot this result and send it to your coordinator."}
+ catch(e){$('sv').textContent="Could not submit. Please screenshot this result and send it to your coordinator."}}
+</script></body></html>
