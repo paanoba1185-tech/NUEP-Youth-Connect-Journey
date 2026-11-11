@@ -58,17 +58,14 @@ table{width:100%;border-collapse:collapse;font-family:system-ui,sans-serif;font-
 {q:"Which two institutions did Alvear sponsor bills for as assemblyman, per the biography?",o:["University of the Philippines and Philippine General Hospital","University of Santo Tomas and Philippine General Hospital","University of the Philippines and the Provincial Capitol","Jose Rizal College and San Juan de Letran"],a:0,e:"UP and PGH, both in 1908. (The Capitol was built later as governor; Jose Rizal College was a school he founded in San Fabian.)"},
 
 ];
-const API="PASTE_YOUR_APPS_SCRIPT_URL_HERE";
 const $=id=>document.getElementById(id);
 let name="",i=0,sel=[],sw=0,inQ=false,T=null,left=0;
 function esc(s){const d=document.createElement('div');d.textContent=String(s);return d.innerHTML}
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&inQ)sw++});
 const chk=()=>$('go').disabled=!($('nm').value.trim().length>=2&&$('ck').checked);$('nm').oninput=chk;$('ck').onchange=chk;
-async function api(q){const r=await fetch(API+"?"+q);return r.json()}
 function blocked(prev){$('start').innerHTML='<b>You have already taken this quiz.</b><div class="sub" style="margin-top:8px">Only one attempt is allowed. Recorded result: '+prev.score+'/10 ('+(prev.passed?'Passed':'Not passed')+')</div>'}
 $('go').onclick=async()=>{name=$('nm').value.trim();$('go').disabled=true;$('go').textContent='Checking\u2026';
  let prev=null;try{const l=localStorage.getItem('alvearDone');if(l)prev=JSON.parse(l)}catch(e){}
- if(!prev){try{const r=await api("action=check&name="+encodeURIComponent(name));if(r.taken)prev=r}catch(e){$('go').disabled=false;$('go').textContent='Start Quiz';alert('Cannot connect. Check your internet and try again.');return}}
  if(prev){blocked(prev);return}
  Q.forEach(q=>{q.s=q.o.map((t,k)=>({t,k})).sort(()=>Math.random()-.5)});Q.sort(()=>Math.random()-.5);
  inQ=true;$('start').classList.add('hide');$('quiz').classList.remove('hide');show()};
@@ -85,8 +82,9 @@ async function finish(){inQ=false;clearInterval(T);let s=0;Q.forEach((q,k)=>{if(
  $('rn').textContent=name;$('rs').textContent=s+" / 10";$('rs').className="big "+(p?"pass":"fail");
  $('rv').textContent=p?"PASSED \u2713":"NOT PASSED \u2717 (need 8/10)";$('rv').className=p?"pass":"fail";
  try{localStorage.setItem('alvearDone',JSON.stringify({name,score:s,passed:p}))}catch(e){}
- $('sv').textContent="Saving your score\u2026";
- try{const r=await api("action=submit&name="+encodeURIComponent(name)+"&score="+s+"&passed="+(p?1:0)+"&sw="+sw);
-  $('sv').textContent=r.ok?"Score submitted \u2713":"Could not submit. Please screenshot this result and send it to your coordinator."}
- catch(e){$('sv').textContent="Could not submit. Please screenshot this result and send it to your coordinator."}}
+ const msg="Don Juan Alvear Quiz\nName: "+name+"\nScore: "+s+"/10 ("+(p?"PASSED":"NOT PASSED")+")\nTab switches: "+sw;
+ $('sv').innerHTML='Send this result to your coordinator:<br><br><button id="sh">Share / Send result</button><div class="sub" id="msg" style="white-space:pre-line;margin-top:10px;text-align:left"></div>';
+ $('msg').textContent=msg;
+ $('sh').onclick=async()=>{try{if(navigator.share){await navigator.share({text:msg});return}}catch(e){}try{await navigator.clipboard.writeText(msg);$('sh').textContent='Copied! Paste it in Messenger'}catch(e){$('sh').textContent='Please screenshot this screen'}};
+}
 </script></body></html>
