@@ -45,7 +45,7 @@ table{width:100%;border-collapse:collapse;font-family:system-ui,sans-serif;font-
 </div>
 
 </div>
-<script>const Q=[{q:"The 100th anniversary directory listed Juan Alvear as President General for which years?",o:["1901–1908", "1905–1908", "1909–1919", "1910–1912"],a:1,e:"The KKEP website said 'No records available' for 1901–1908; the directory listed Alvear for 1905–1908."},
+<script>const SETS={A:[{q:"The 100th anniversary directory listed Juan Alvear as President General for which years?",o:["1901–1908", "1905–1908", "1909–1919", "1910–1912"],a:1,e:"The KKEP website said 'No records available' for 1901–1908; the directory listed Alvear for 1905–1908."},
 {q:"In whose tomb do Don Juan Alvear's remains lie?",o:["The tomb of his parents, Pedro Alvear and Maria Erfe", "The tomb of his wife, Panchacola", "The tomb of Agustin dela Rosa", "The tomb of the parents of Chrisforo Alvear Ursais: Ursais Jr. and Ester Alvear Ursais"],a:3,e:"His remains are in the tomb of Ursais Jr. and Ester Alvear Ursais."},
 {q:"What does the statue of Don Juan Alvear hold?",o:["Cane in the left hand, Holy Bible in the right", "A scroll in the right hand, a sword in the left", "Cane in the right hand, Holy Bible in the left", "The Holy Bible in both hands"],a:2,e:"Right hand: cane; left hand: Holy Bible."},
 {q:"Which is the correct order of his public service?",o:["Governor (1910–1912) → Mayor (1899) → Representative (1907–1910)", "Mayor of San Fabian (1899) → Representative of the 3rd District (1907–1910) → Governor of Pangasinan (1910–1912)", "Representative (1899) → Mayor (1907–1910) → Governor (1910–1912)", "Mayor (1899) → Governor (1907–1910) → Representative (1910–1912)"],a:1,e:"Mayor 1899, Representative 1907–1910, Governor 1910–1912."},
@@ -55,9 +55,33 @@ table{width:100%;border-collapse:collapse;font-family:system-ui,sans-serif;font-
 {q:"Which doctrine belongs to Bro. Agustin dela Rosa?",o:["Hacia Dios por la Ciencia y El Amor", "Sin caridad no hay salvacion possible", "Hacia Dios por la Luz y El Amor", "Ciencia Oculta"],a:1,e:"Dela Rosa: 'Sin caridad no hay salvacion possible' (without charity there is no salvation)."},
 {q:"Which two bills did he author as representative?",o:["University of Santo Tomas and Philippine General Hospital", "University of the Philippines and the Provincial Capitol", "Jose Rizal College and Philippine General Hospital", "University of the Philippines and Philippine General Hospital"],a:3,e:"UP (scholarships for poor bright students) and PGH (to help the poor)."},
 {q:"Which statement about his birth and death is correct?",o:["Born July 21, 1864 in San Fabian; died Dec. 5, 1918 at PGH, Manila, at age 54", "Born July 21, 1864 in Manila; died Dec. 5, 1918 in San Fabian", "Born Dec. 5, 1864 in San Fabian; died July 21, 1918 at PGH", "Born July 21, 1864 in San Fabian; died Dec. 5, 1918 at age 64"],a:0,e:"Born July 21, 1864, San Fabian; died Dec. 5, 1918, PGH Manila, age 54."}
-];
+],
+B:[{q:"Who showed the youth the 100th anniversary directory at Centro La Perseverancia?",o:["Bro. Pedro Jimenez", "Bro. Benjamin Imbuido", "Bro. Marcelo Basbas", "Bro. Chrisforo Alvear Ursais"],a:1,e:"Bro. Benjamin Imbuido showed the directory."},
+{q:"What condition was Don Juan Alvear's old house in when the youth visited?",o:["Perfectly preserved as a museum", "Turned into a church", "Collapsed from termite damage, behind a tall zinc fence", "Burned down in a fire"],a:2,e:"The house had collapsed from termites and was behind a very tall zinc fence."},
+{q:"The man who called out to the youth near the old house was Don Juan Alvear's\u2026",o:["Son, Bro. Pete Ferrer", "Grandson, Bro. Chrisforo Alvear Ursais", "Brother, Bro. Benjamin Imbuido", "Student, Bro. Marcelo Basbas"],a:1,e:"He was a grandson, Bro. Chrisforo Alvear Ursais."},
+{q:"Which plant grows beside his tomb, said to heal those who have faith?",o:["Agdao", "Sampaguita", "Banaba", "Kamias"],a:0,e:"The Agdao plant, according to the grandson."},
+{q:"Why did the youth go to the front of the municipal hall to see the statue?",o:["The statue had been moved there that day", "The library was closed because the caretaker was away", "They were told the library burned down", "They were not allowed inside the library"],a:1,e:"The library was closed since the caretaker was away."},
+{q:"Who were Don Juan Alvear's parents?",o:["Ursais Jr. and Ester Alvear Ursais", "Agustin dela Rosa and Panchacola", "Pedro Alvear and Maria Erfe", "Benjamin Imbuido and Maria Erfe"],a:2,e:"Pedro Alvear and Maria Erfe."},
+{q:"At which university did he study, and who was one of his students at San Juan de Letran?",o:["University of the Philippines; Emilio Aguinaldo", "University of Santo Tomas; Manuel L. Quezon", "Jose Rizal College; Manuel L. Quezon", "University of Santo Tomas; Emilio Aguinaldo"],a:1,e:"UST graduate; taught at San Juan de Letran, where Manuel L. Quezon was a student."},
+{q:"Whom did Don Juan Alvear marry?",o:["A Spanish woman named Maria Erfe", "A Portuguese woman named Panchacola", "A Filipina named Ester Alvear", "A Portuguese woman named Maria Erfe"],a:1,e:"He married a Portuguese woman, Panchacola."},
+{q:"In 1899, what position did he hold in San Fabian?",o:["First mayor", "Provincial governor", "Representative", "President General"],a:0,e:"He was the first mayor of San Fabian in 1899."},
+{q:"Which is Don Juan Alvear's doctrine, meaning 'Towards God through science and love'?",o:["Sin caridad no hay salvacion possible", "Hacia Dios por la Ciencia y El Amor", "Ciencia Oculta", "Hacia Dios por la Luz y El Amor"],a:1,e:"Hacia Dios por la Ciencia y El Amor. (Sin caridad… belongs to dela Rosa.)"}],
+C:[{q:"In what year did Don Juan Alvear found the Espiritista?",o:["1899", "1901", "1905", "1910"],a:1,e:"He founded it in 1901; in 1905, with dela Rosa, the UECFI was formed."},
+{q:"Under which leader was he a captain of the Katipunan?",o:["Andres Bonifacio", "Jose Rizal", "Emilio Aguinaldo", "Manuel L. Quezon"],a:2,e:"Captain of the Katipunan under Emilio Aguinaldo."},
+{q:"Where did he have the Provincial Capitol built?",o:["Dagupan", "San Fabian", "Lingayen", "Manila"],a:2,e:"The Provincial Capitol was built in Lingayen."},
+{q:"His original house was later turned into what?",o:["San Fabian College", "A hospital", "The municipal hall", "The Provincial Capitol"],a:0,e:"It became the San Fabian College."},
+{q:"Why was the UECFI merged with another group in 1903?",o:["Because he lost the case in court", "Because another group was registering a similar organization at the S.E.C.", "Because of a Katipunan order", "Because the Bureau of Commerce required it"],a:1,e:"Others were registering a similar group at the S.E.C., so they were merged in 1903."},
+{q:"At about age sixty he prayed every afternoon in a field. What did an old man see?",o:["A butterfly over his heart", "A light brighter than the sun", "Him walking on water", "Money hidden in a house"],a:1,e:"A light brighter than the sun; a building later first used as a clinic was built."},
+{q:"In the story about the palay, what happened to the man who lied about his number of children?",o:["He was given double palay", "His hand could not be pulled out of the sack", "He was jailed", "He was healed"],a:1,e:"His hand could not leave the sack."},
+{q:"What kept appearing over his heart in the coffin?",o:["A dove", "A candle flame", "A butterfly", "A white light"],a:2,e:"A butterfly kept appearing over his heart."},
+{q:"Which books did he leave behind?",o:["Doktrina Espiritista and Ciencia Oculta", "Hacia Dios and Sin Caridad", "Noli Me Tangere and El Filibusterismo", "La Perseverancia and Union Espiritista"],a:0,e:"Doktrina Espiritista and Ciencia Oculta."},
+{q:"According to Bro. Pete Ferrer, why did he found schools?",o:["The government required it", "He believed education is the key to the nation's progress", "To hide his idols", "To honor Manuel L. Quezon"],a:1,e:"He believed education was the key to progress; he was also the first elected governor (1909)."}]};
+let Q=[];
+function rng(n){let h=0;n=n.toLowerCase().replace(/\s+/g,' ');for(const ch of n)h=(h*31+ch.charCodeAt(0))>>>0;return()=>{h=(h+0x6D2B79F5)>>>0;let t=h;t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(t^t>>>7,t|61);return((t^t>>>14)>>>0)/4294967296}}
+function pickSet(n){let h=0;n=n.toLowerCase().replace(/\s+/g,' ');for(const ch of n)h=(h*31+ch.charCodeAt(0))>>>0;return['A','B','C'][h%3]}
+
 const $=id=>document.getElementById(id);
-let name="",i=0,sel=[],sw=0,inQ=false,T=null,left=0;
+let setId="",name="",i=0,sel=[],sw=0,inQ=false,T=null,left=0;
 function esc(s){const d=document.createElement('div');d.textContent=String(s);return d.innerHTML}
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&inQ)sw++});
 const chk=()=>$('go').disabled=!($('nm').value.trim().length>=2&&$('ck').checked);$('nm').oninput=chk;$('ck').onchange=chk;
@@ -65,7 +89,7 @@ function blocked(prev){$('start').innerHTML='<b>You have already taken this quiz
 $('go').onclick=async()=>{name=$('nm').value.trim();$('go').disabled=true;$('go').textContent='Checking\u2026';
  let prev=null;try{const l=localStorage.getItem('alvearDone');if(l)prev=JSON.parse(l)}catch(e){}
  if(prev){blocked(prev);return}
- Q.forEach(q=>{q.s=q.o.map((t,k)=>({t,k})).sort(()=>Math.random()-.5)});Q.sort(()=>Math.random()-.5);
+ const R=rng(name),P=[...SETS.A,...SETS.B,...SETS.C].map(q=>Object.assign({},q));for(let z=P.length-1;z>0;z--){const j=Math.floor(R()*(z+1));[P[z],P[j]]=[P[j],P[z]]}Q=P.slice(0,10);setId=Q.map(q=>SETS.A.concat(SETS.B,SETS.C).findIndex(o=>o.q===q.q)+1).sort((x,y)=>x-y).join('-');Q.forEach(q=>{q.s=q.o.map((t,k)=>({t,k})).sort(()=>Math.random()-.5)});Q.sort(()=>Math.random()-.5);
  inQ=true;$('start').classList.add('hide');$('quiz').classList.remove('hide');show()};
 function tick(){$('tm').textContent='\u23f1 '+left+'s';if(left<=0){adv();return}left--}
 function startT(){clearInterval(T);left=30;tick();T=setInterval(tick,1000)}
@@ -79,8 +103,8 @@ async function finish(){inQ=false;clearInterval(T);let s=0;Q.forEach((q,k)=>{if(
  $('quiz').classList.add('hide');$('res').classList.remove('hide');
  $('rn').textContent=name;$('rs').textContent=s+" / 10";$('rs').className="big "+(p?"pass":"fail");
  $('rv').textContent=p?"PASSED \u2713":"NOT PASSED \u2717 (need 8/10)";$('rv').className=p?"pass":"fail";
- try{localStorage.setItem('alvearDone',JSON.stringify({name,score:s,passed:p}))}catch(e){}
- const msg="Don Juan Alvear Quiz\nName: "+name+"\nScore: "+s+"/10 ("+(p?"PASSED":"NOT PASSED")+")\nTab switches: "+sw;
+ try{localStorage.setItem('alvearDone',JSON.stringify({name,score:s,passed:p,set:setId}))}catch(e){}
+ const msg="Don Juan Alvear Quiz (Version "+setId+")\nName: "+name+"\nScore: "+s+"/10 ("+(p?"PASSED":"NOT PASSED")+")\nTab switches: "+sw;
  $('sv').innerHTML='Send this result to your coordinator:<br><br><button id="sh">Share / Send result</button><div class="sub" id="msg" style="white-space:pre-line;margin-top:10px;text-align:left"></div>';
  $('msg').textContent=msg;
  $('sh').onclick=async()=>{try{if(navigator.share){await navigator.share({text:msg});return}}catch(e){}try{await navigator.clipboard.writeText(msg);$('sh').textContent='Copied! Paste it in Messenger'}catch(e){$('sh').textContent='Please screenshot this screen'}};
