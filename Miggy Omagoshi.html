@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Miggy Omagoshi</title>
+<style>
+:root{--bg:#dff0ff;--ink:#14304f;--mut:#5f7f9f;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f2036;--ink:#eaf4ff;--mut:#9dbbdb}}
+:root[data-theme="dark"]{--bg:#0f2036;--ink:#eaf4ff;--mut:#9dbbdb}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Courier New",monospace;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:16px 8px 24px}
+.egg{width:min(330px,94vw);background:linear-gradient(160deg,#4aa3ff,#1f6fd6 60%,#1553a8);border-radius:50% 50% 50% 50%/58% 58% 42% 42%;padding:46px 26px 54px;box-shadow:0 10px 0 #0d3b7a,inset 0 -8px 14px rgba(0,0,0,.25),inset 0 8px 14px rgba(255,255,255,.3);text-align:center}
+.brand{color:#fff;font-weight:700;letter-spacing:2px;font-size:15px;margin-bottom:10px;text-shadow:0 2px 0 rgba(0,0,0,.3)}
+.bezel{background:#e8eef5;border-radius:22px;padding:12px;box-shadow:inset 0 3px 6px rgba(0,0,0,.3)}
+.lcd{background:#b7c9a2;border-radius:10px;padding:6px;box-shadow:inset 0 0 12px rgba(0,0,0,.35);color:#2a3320;transition:filter .3s}
+.lcd.dark{filter:brightness(.45)}
+#icons{display:flex;justify-content:space-between;font-size:11px;font-weight:700;height:20px;align-items:center}
+#icons span{padding:1px 4px;border-radius:3px}
+#icons span.on{background:#2a3320;color:#b7c9a2}
+canvas{width:100%;image-rendering:pixelated;display:block;aspect-ratio:4/3}
+#line{font-size:12px;font-weight:700;height:18px;white-space:nowrap;overflow:hidden}
+.btns{display:flex;justify-content:center;gap:26px;margin-top:20px}
+.btns button{width:58px;height:58px;border-radius:50%;border:0;background:radial-gradient(circle at 35% 30%,#ffe066,#f5a400);font:700 20px "Courier New",monospace;color:#5a3a00;box-shadow:0 6px 0 #a56a00}
+.btns button:active{transform:translateY(5px);box-shadow:0 1px 0 #a56a00}
+.btns small{display:block;color:#fff;font-size:10px;margin-top:8px;letter-spacing:1px}
+.under{margin-top:18px;text-align:center;color:var(--mut);font-size:13px}
+#nm{display:none;margin-top:8px;padding:8px;border-radius:8px;border:2px solid var(--mut);background:transparent;color:var(--ink);font:16px "Courier New",monospace;text-align:center;width:200px}
+#picker{display:none;grid-template-columns:repeat(4,1fr);gap:8px;max-width:340px;margin:0 auto 12px}
+#picker button{background:#b7c9a2;border:3px solid transparent;border-radius:10px;padding:4px;font:700 11px "Courier New",monospace;color:#2a3320}
+#picker button.on{border-color:#1f6fd6;box-shadow:0 0 0 2px #fff}
+#picker canvas{width:48px;height:48px;aspect-ratio:1;margin:0 auto 2px}
+.link{background:none;border:0;color:var(--mut);text-decoration:underline;font:13px "Courier New",monospace;margin-top:10px}
+</style>
+</head>
+<body>
+<div class="egg">
+  <div class="brand">MIGGY OMAGOSHI</div>
+  <div class="bezel"><div class="lcd" id="lcd">
+    <div id="icons"></div>
+    <canvas id="cv" width="64" height="48"></canvas>
+    <div id="line"></div>
+  </div></div>
+  <div class="btns">
+    <div><button id="bA">A</button><small>NEXT</small></div>
+    <div><button id="bB">B</button><small>OK</small></div>
+    <div><button id="bC">C</button><small>STATS</small></div>
+  </div>
+</div>
+<div class="under">
+  <div id="picker"></div>
+  <input id="nm" maxlength="10" placeholder="Name your pet" aria-label="Pet name"><br>
+  <button class="link" id="reset">Choose a new pet</button>
+</div>
+<script>
+const SP=[
+["DINO","....####....|...######...|...##.###...|...######...|...#####....|#..####.....|##.######...|#########...|.########.#.|..######.##.|..##..##....|..##..##...."],
+["CAT",".#........#.|.##......##.|.##########.|.##########.|.###.##.###.|.##########.|.####..####.|..########..|..########..|.##########.|.##.####.##.|.##......##."],
+["DOG","............|.##......##.|.###.##.###.|.##########.|.##.####.##.|.##########.|..###..###..|..########..|...######.#.|...######.#.|...##..##...|...##..##..."],
+["CHICK","............|....####....|...######...|..########..|..#.####.#..|..########..|..###..###..|...######...|..########..|..########..|...######...|....#..#...."],
+["FROGGY","............|.###....###.|.#.#....#.#.|.###....###.|.##########.|.#.######.#.|.##########.|..########..|.##.####.##.|.##......##.|.###....###.|............"],
+["ROBO",".....##.....|.....##.....|..########..|..#......#..|..#.#..#.#..|..#......#..|..#.####.#..|..########..|.##########.|.#.######.#.|.#.######.#.|...##..##..."]
+,["BUNNY","..##....##..|..##....##..|..##....##..|..########..|.##########.|.###.##.###.|.##########.|..###..###..|..########..|.##########.|.##########.|..##....##.."],["PENGUIN","....####....|...######...|...#.##.#...|...######...|..########..|.##.####.##.|.##.####.##.|.##.####.##.|..#.####.#..|...######...|...##..##...|..###..###.."]].map(p=>[p[0],p[1].split("|")]);
+const EGG=["....####....","...######...","..########..","..##.#####..",".##########.",".#####.####.",".##########.",".###.#####..","..########..","..########..","...######...","....####...."];
+const ITEMS=["FEED","PLAY","CLEAN","SLEEP","NEW"],KEY="miggy-omagoshi-v2";
+const $=id=>document.getElementById(id),cx=$("cv").getContext("2d");
+let S=null,mode="select",sel=0,pick=0,f=0,tmp="",busy=false,fx="",g=null,sure=false;
+const clamp=v=>Math.max(0,Math.min(100,v));
+function load(){try{return JSON.parse(localStorage.getItem(KEY))}catch(e){return null}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+let ac;function beep(fr,d){try{ac=ac||new(window.AudioContext||window.webkitAudioContext)();const o=ac.createOscillator(),v=ac.createGain();o.type="square";o.frequency.value=fr;v.gain.value=.05;o.connect(v);v.connect(ac.destination);o.start();o.stop(ac.currentTime+(d||.08))}catch(e){}}
+function say(t,ms){tmp=t;render();if(ms)setTimeout(()=>{if(tmp===t){tmp="";render()}},ms)}
+function stage(){const m=(Date.now()-S.born)/60000;return m<5?0:m<30?1:2}
+function sprite(rows,x,y,s){cx.fillStyle="#2a3320";rows.forEach((r,j)=>{for(let i=0;i<r.length;i++)if(r[i]==="#")cx.fillRect(x+i*s,y+j*s,s,s)})}
+function mood(){
+  if(S.sleeping)return"ZZZ... SLEEPING";
+  if(S.hunger<25)return"I'M HUNGRY!";
+  if(S.clean<30)return"CLEAN ME!";
+  if(S.energy<25)return"SO SLEEPY...";
+  if(S.happy<25)return"PLAY WITH ME!";
+  return S.name+" IS HAPPY";
+}
+function render(){
+  cx.clearRect(0,0,64,48);
+  const ic=$("icons");
+  if(mode==="select"){
+    ic.innerHTML="<span>PICK A PET</span><span>"+(pick+1)+"/"+SP.length+"</span>";
+    sprite(SP[pick][1],14,6+f,3);
+    $("picker").style.display="grid";document.querySelectorAll("#picker button").forEach((b,i)=>b.classList.toggle("on",i===pick));
+    $("line").textContent="A:NEXT  B:CHOOSE  "+SP[pick][0];
+    return;
+  }
+  $("picker").style.display="none";
+  if(mode==="egg"){
+    const left=Math.max(0,Math.ceil((S.hatchAt-Date.now())/1000));
+    ic.innerHTML="<span>"+S.name+"’S EGG</span><span>"+left+"s</span>";
+    $("lcd").classList.remove("dark");
+    if(fx==="hatch"&&f)sprite(SP[S.pet][1],14,6,3);else{sprite(EGG,14+(f?1:-1),6,3);if(left<15&&fx!=="hatch"){cx.clearRect(24,18,3,3);cx.clearRect(27,21,3,3);cx.clearRect(24,24,3,3)}}
+    $("line").textContent=tmp||"B: WARM THE EGG";
+    return;
+  }
+  ic.innerHTML=ITEMS.map((t,i)=>`<span class="${i===sel&&mode==="main"?"on":""}">${t}</span>`).join("");
+  $("lcd").classList.toggle("dark",S.sleeping);
+  const s=stage()?3:2,sz=12*s,x=Math.floor((64-sz)/2)+(fx==="eat"?-6:0),y=Math.floor((44-sz)/2)+4;
+  if(mode==="stat"){
+    const L=[["FOOD",S.hunger],["HAPPY",S.happy],["CLEAN",S.clean],["ENERGY",S.energy]];
+    L.forEach((r,i)=>{cx.fillStyle="#2a3320";for(let k=0;k<5;k++){const on=r[1]>=(k+.5)*20;cx.fillRect(30+k*6,4+i*10,5,5);if(!on){cx.clearRect(31+k*6,5+i*10,3,3)}}});
+    ic.innerHTML="<span>STATS</span><span>AGE "+["BABY","KID","BIG"][stage()]+"</span>";
+    $("line").textContent="FOOD/HAPPY/CLEAN/ENERGY";
+    return;
+  }
+  if(!S.sleeping){sprite(SP[S.pet][1],x,y+(f?1:0)-(fx==="jump"?5:0),s)}
+  else sprite(SP[S.pet][1],x,y+2,s);
+  if(fx==="eat"){cx.fillStyle="#2a3320";cx.fillRect(x+sz+2,y+sz-10,8,8);cx.clearRect(x+sz+4,y+sz-8,4,4)}
+  if(S.clean<40){cx.fillStyle="#2a3320";cx.fillRect(54,40,4,2);cx.fillRect(53,42,6,3)}
+  if(mode==="game"){$("line").textContent=tmp||"R"+(g.r+1)+"/5  A:< LEFT  B:RIGHT >";return}
+  $("line").textContent=tmp||mood();
+}
+function act(){
+  if(busy)return;
+  const a=ITEMS[sel];
+  if(a==="NEW"){if(!sure){sure=true;say("B AGAIN = NEW PET",2500);setTimeout(()=>{sure=false},2500);return}newPet();return}
+  if(S.sleeping&&a!=="SLEEP"){say("SHH! SLEEPING",900);return}
+  if(a==="FEED"){if(S.hunger>95){say("FULL! NO THANKS",900);return}
+    S.hunger=clamp(S.hunger+25);S.clean=clamp(S.clean-5);anim("eat","YUM YUM!");beep(660)}
+  if(a==="CLEAN"){S.clean=100;S.happy=clamp(S.happy+5);anim("jump","SPARKLY CLEAN!");beep(880)}
+  if(a==="SLEEP"){S.sleeping=!S.sleeping;beep(S.sleeping?300:700);say(S.sleeping?"GOOD NIGHT":"GOOD MORNING!",1200)}
+  if(a==="PLAY"){if(S.energy<15){say("TOO TIRED...",900);return}g={r:0,w:0};mode="game";say("",0)}
+  S.last=Date.now();save();render();
+}
+function anim(k,t){busy=true;fx=k;say(t);setTimeout(()=>{fx="";busy=false;tmp="";render()},1400)}
+function guess(d){
+  if(busy)return;busy=true;const ans=Math.random()<.5?0:1,hit=ans===d;
+  if(hit)g.w++;beep(hit?880:200,.15);say(hit?"HIT! :)":"MISS :(");
+  setTimeout(()=>{g.r++;tmp="";busy=false;
+    if(g.r>=5){const win=g.w>=3;S.happy=clamp(S.happy+(win?35:12));S.energy=clamp(S.energy-12);S.hunger=clamp(S.hunger-6);
+      mode="main";S.last=Date.now();save();anim("jump",win?"YOU WIN! "+g.w+"/5":"GOOD TRY "+g.w+"/5")}
+    else render()},800);
+}
+$("bA").onclick=()=>{beep(520);
+  if(mode==="select"){pick=(pick+1)%SP.length;render()}
+  else if(mode==="main"){sel=(sel+1)%ITEMS.length;render()}
+  else if(mode==="game")guess(0)};
+$("bB").onclick=()=>{
+  if(mode==="select"){beep(880);S={pet:pick,name:($("nm").value.trim()||SP[pick][0]).toUpperCase(),hunger:80,happy:80,clean:80,energy:80,sleeping:false,egg:true,hatchAt:Date.now()+45000,born:Date.now(),last:Date.now()};save();start()}
+  else if(mode==="egg"){beep(660);S.hatchAt-=5000;save();render()}
+  else if(mode==="main"){beep(660);act()}
+  else if(mode==="game")guess(1)};
+$("bC").onclick=()=>{beep(400);
+  if(mode==="main"){mode="stat";render()}
+  else if(mode==="stat"){mode="main";render()}
+  else if(mode==="game"&&!busy){mode="main";g=null;tmp="";render()}};
+$("reset").onclick=()=>{
+  if(!sure){sure=true;$("reset").textContent="Tap again to say goodbye";setTimeout(()=>{sure=false;$("reset").textContent="Choose a new pet"},3000);return}
+  sure=false;S=null;try{localStorage.removeItem(KEY)}catch(e){}
+  mode="select";$("nm").style.display="inline-block";$("lcd").classList.remove("dark");$("reset").textContent="Choose a new pet";render()};
+function newPet(){sure=false;S=null;tmp="";try{localStorage.removeItem(KEY)}catch(e){}mode="select";$("nm").style.display="inline-block";$("lcd").classList.remove("dark");render()}
+function start(){mode=S.egg?"egg":"main";sel=0;$("nm").style.display="none";render()}
+function hatch(){busy=true;fx="hatch";say("HATCHING!");let n=0;const iv=setInterval(()=>{beep(500+n*80,.1);if(++n>8){clearInterval(iv);S.egg=false;S.born=Date.now();S.last=Date.now();save();fx="";busy=false;tmp="";mode="main";say("HELLO! I’M "+S.name+"!",2500)}},400)}
+function tick(){
+  if(!S)return;
+  if(S.egg){mode="egg";if(!busy&&Date.now()>=S.hatchAt)hatch();render();return}
+  let m=Math.min((Date.now()-S.last)/60000,60);if(m>2)m*=.4;
+  S.hunger=clamp(S.hunger-m*1.2);S.happy=clamp(S.happy-m*(S.hunger<25?1.6:.8));S.clean=clamp(S.clean-m*.7);
+  S.energy=clamp(S.energy+(S.sleeping?m*6:-m*.8));if(S.sleeping&&S.energy>=100)S.sleeping=false;
+  S.last=Date.now();save();
+  if(mode!=="select"&&(S.hunger<25||S.clean<30||S.energy<25||S.happy<25)&&!S.sleeping&&Math.random()<.1)beep(1000,.12);
+  render();
+}
+SP.forEach((p,i)=>{const b=document.createElement("button"),c=document.createElement("canvas");c.width=c.height=12;const k=c.getContext("2d");k.fillStyle="#2a3320";p[1].forEach((r,j)=>{for(let x=0;x<12;x++)if(r[x]==="#")k.fillRect(x,j,1,1)});b.appendChild(c);b.appendChild(document.createTextNode(p[0]));b.onclick=()=>{pick=i;beep(520);render()};$("picker").appendChild(b)});
+S=load();
+if(S&&SP[S.pet]){tick();start()}else{S=null;$("nm").style.display="inline-block";render()}
+setInterval(()=>{f=f?0:1;render()},600);
+setInterval(tick,3000);
+</script>
+</body>
+</html>
