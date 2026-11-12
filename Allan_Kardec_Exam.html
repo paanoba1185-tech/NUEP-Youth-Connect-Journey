@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="tl"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pagsusulit: Sino si Allan Kardec?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap">
+<style>
+:root{--bg:#fbf3ea;--bg2:#f3dcc4;--card:#fff;--ink:#2a1d16;--mut:#7d6a5c;--a:#c0623a;--a2:#e8a26b;--ln:rgba(60,30,10,.12);--ok:#2f8f5b;--bad:#c2413b;color-scheme:light}
+@media (prefers-color-scheme:dark){:root{--bg:#1b1410;--bg2:#2c1f17;--card:#2a201a;--ink:#f6ebe0;--mut:#b9a594;--a:#f0925f;--a2:#c0623a;--ln:rgba(255,230,200,.14);--ok:#5ccf8f;--bad:#ff8a80;color-scheme:dark}}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%}
+body{background:radial-gradient(120% 70% at 50% 0,var(--bg2),var(--bg)) fixed;color:var(--ink);font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding:env(safe-area-inset-top,0) 14px env(safe-area-inset-bottom,0);-webkit-touch-callout:none}
+main{max-width:540px;margin:0 auto;padding:16px 0 24px}
+[hidden]{display:none!important}
+.card{background:var(--card);border:1px solid var(--ln);border-radius:26px;padding:18px;display:flex;flex-direction:column;gap:12px}
+h1{margin:0;font-size:24px;line-height:1.2;font-weight:800;letter-spacing:-.02em}h2{margin:0;font-size:20px;line-height:1.3;font-weight:800}
+p{margin:0;line-height:1.5}.m{color:var(--mut);font-size:14px}
+button{font:inherit;cursor:pointer;border:0;color:inherit}
+.btn{background:var(--a);color:#fff;font-weight:700;font-size:16px;border-radius:999px;padding:13px 20px;width:100%}.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn.g{background:var(--bg);color:var(--ink);border:1px solid var(--ln)}
+.row{display:flex;gap:10px}.row .btn{flex:1}
+.av{width:104px;height:104px;border-radius:50%;overflow:hidden;margin:0 auto;background:radial-gradient(circle at 50% 35%,#e3b088,#c8956e);border:3px solid var(--card);box-shadow:0 6px 18px rgba(0,0,0,.22)}.av svg{width:100%;height:100%;display:block;margin-top:6px}
+.car .mo{display:none}.car .hd{transform-origin:100px 200px;animation:bob 3.6s ease-in-out infinite}.car .ey{transform-origin:100px 107px;animation:bl 4.2s infinite}
+@keyframes bob{50%{transform:rotate(-1.5deg) translateY(-2px)}}@keyframes bl{0%,93%,100%{transform:scaleY(1)}96%{transform:scaleY(.08)}}
+.rules{margin:0;padding:0;list-style:none;display:grid;gap:7px}.rules li{background:var(--bg);border-radius:13px;padding:9px 12px;font-size:14.5px;line-height:1.4}
+label.f{display:grid;gap:6px;font-weight:600;font-size:14.5px}
+input[type=text]{font:inherit;font-size:17px;padding:12px 14px;border-radius:14px;border:2px solid var(--ln);background:var(--bg);color:var(--ink);width:100%}input[type=text]:focus{outline:none;border-color:var(--a)}
+.chk{display:flex;gap:10px;align-items:flex-start;font-size:14px;line-height:1.4}.chk input{width:20px;height:20px;margin-top:1px;accent-color:var(--a);flex:none}
+.err{color:var(--bad);font-size:14px;font-weight:600;min-height:1.2em}
+.big{font-size:21px;font-weight:800;text-align:center;background:var(--bg);border:2px dashed var(--a);border-radius:18px;padding:16px;word-break:break-word}
+.cd{font-size:96px;font-weight:800;color:var(--a);text-align:center;animation:pop .9s both}
+@keyframes pop{from{transform:scale(.4);opacity:0}}
+#q{user-select:none;-webkit-user-select:none}
+.top{display:flex;justify-content:space-between;align-items:center;font-weight:700;font-size:14px;color:var(--mut)}
+.tn{font-size:34px;font-weight:800;color:var(--a);min-width:2ch;text-align:right;line-height:1}.low .tn{color:var(--bad)}
+.bar{height:9px;background:var(--ln);border-radius:9px;overflow:hidden}.bar i{display:block;height:100%;width:100%;background:linear-gradient(90deg,var(--a2),var(--a));transition:width .1s linear}.low .bar i{background:var(--bad)}
+.dots{display:flex;gap:4px}.dots i{flex:1;height:5px;border-radius:5px;background:var(--ln)}.dots i.d{background:var(--a)}
+.opt{display:flex;gap:10px;align-items:flex-start;text-align:left;width:100%;background:var(--bg);border:2px solid transparent;border-radius:15px;padding:12px 13px;font-size:16px;line-height:1.35;margin-top:8px}
+.opt b{flex:none;width:26px;height:26px;border-radius:50%;background:var(--card);border:1px solid var(--ln);display:grid;place-items:center;font-size:13px}
+.opt.sel{border-color:var(--a);background:color-mix(in srgb,var(--a) 14%,var(--bg))}
+.toast{background:color-mix(in srgb,var(--bad) 15%,var(--card));color:var(--ink);border-radius:13px;padding:9px 12px;font-size:14px;font-weight:600}
+.ring{width:150px;height:150px;margin:0 auto;position:relative}.ring svg{transform:rotate(-90deg)}
+.ring circle{fill:none;stroke-width:12}.ring .t{stroke:var(--ln)}.ring .p{stroke:var(--a);stroke-linecap:round;stroke-dasharray:377;stroke-dashoffset:377;transition:stroke-dashoffset 1.4s cubic-bezier(.2,.8,.2,1)}
+.ring.pass .p{stroke:var(--ok)}.ring.fail .p{stroke:var(--bad)}
+.ring span{position:absolute;inset:0;display:grid;place-items:center;font-size:40px;font-weight:800}
+.tag{width:fit-content;margin:0 auto;font-weight:800;font-size:14px;border-radius:999px;padding:5px 14px;color:#fff}.tag.pass{background:var(--ok)}.tag.fail{background:var(--bad)}
+.meta{display:grid;gap:6px;font-size:14px}.meta div{display:flex;justify-content:space-between;gap:12px;background:var(--bg);border-radius:12px;padding:8px 12px}.meta b{text-align:right;word-break:break-word}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style></head><body><main>
+<section id="intro" class="card">
+<div class="av" id="av1"></div>
+<h1>Pagsusulit: Sino si Allan Kardec?</h1>
+<ul class="rules">
+<li>📝 10 tanong, <b>10 segundo</b> bawat tanong</li>
+<li>✅ Kailangan ng <b>8/10</b> para pumasa</li>
+<li>1️⃣ <b>Isang beses lang</b> ang pagsusulit at hindi na mauulit</li>
+<li>🚫 Kapag lumabas ka sa page o nag-refresh, mabibilang itong mali o matatapos na ang pagsusulit</li>
+</ul>
+<label class="f">Buong pangalan sa Facebook
+<input type="text" id="nm" autocomplete="off" autocapitalize="words" spellcheck="false" maxlength="60" placeholder="Hal. Juan Dela Cruz"></label>
+<label class="chk"><input type="checkbox" id="ck"><span>Ito ang eksaktong pangalan ko sa Facebook na gamit sa Youth Connect. Hindi ito alias o palayaw.</span></label>
+<div class="err" id="er"></div>
+<button class="btn" id="go1">Magpatuloy</button>
+</section>
+<section id="conf" class="card" hidden>
+<h2>Tama ba ang pangalan mo?</h2>
+<div class="big" id="cn"></div>
+<p class="m">Hindi na ito mababago kapag nagsimula ka na. Isang pagkakataon lang ang meron ka, at 10 segundo ang bawat tanong.</p>
+<div class="row"><button class="btn g" id="bk">Baguhin</button><button class="btn" id="go2">Simulan na</button></div>
+</section>
+<section id="cdn" class="card" hidden><p class="m" style="text-align:center">Maghanda…</p><div class="cd" id="cdv">3</div></section>
+<section id="q" class="card" hidden>
+<div class="top"><span id="qn"></span><span class="tn" id="tn">10</span></div>
+<div class="bar"><i id="bf"></i></div>
+<div class="dots" id="dt"></div>
+<h2 id="qt"></h2><div id="ops"></div><div class="toast" id="ts" hidden></div>
+</section>
+<section id="res" class="card" hidden>
+<div class="av" id="av2"></div>
+<span class="tag" id="rt"></span>
+<div class="ring" id="rg"><svg width="150" height="150" viewBox="0 0 150 150"><circle class="t" cx="75" cy="75" r="60"/><circle class="p" cx="75" cy="75" r="60"/></svg><span id="rs">0/10</span></div>
+<h2 id="rh" style="text-align:center"></h2>
+<p class="m" id="rm" style="text-align:center"></p>
+<div class="meta" id="mt"></div>
+<p class="m" id="rn" style="text-align:center"></p>
+</section>
+</main>
+<script>
+const B="eyJBIjogW1siU2FhbiBhdCBrYWlsYW4gaXNpbmlsYW5nIHNpIEFsbGFuIEthcmRlYz8iLCAiTHlvbiwgRnJhbmNlLCBub29uZyAxODA0IiwgIlBhcmlzLCBGcmFuY2UsIG5vb25nIDE4MDQiLCAiTHlvbiwgRnJhbmNlLCBub29uZyAxODU0IiwgIlN3aXR6ZXJsYW5kLCBub29uZyAxODA0Il0sIFsiQW5vIGFuZyB0dW5heSBuaXlhbmcgcGFuZ2FsYW4gbmFuZyBzaXlhIGF5IGlwYW5nYW5haz8iLCAiSGlwcG9seXRlIEzDqW9uIERlbml6YXJkIFJpdmFpbCIsICJKZWFuLUJhcHRpc3RlIEFudG9pbmUgRHVoYW1lbCIsICJBbGxhbiBLYXJkZWMgUml2YWlsIiwgIkzDqW9uIFBlc3RhbG96emkgQm91ZGV0Il0sIFsiU2lubyBhbmcga2lsYWxhbmcgZ3VybyBuYSBuYW11bm8gc2EgcGFhcmFsYW5nIHBpbmFzdWthbiBuaSBSaXZhaWwgc2EgU3dpdHplcmxhbmQ/IiwgIlBlc3RhbG96emkiLCAiQm91ZGV0IiwgIkR1aGFtZWwiLCAiRm94Il0sIFsiSWxhbmcgZXN0dWR5YW50ZSBhbmcgbmFnLWVucm9sbCBzYSBwYWFyYWxhbmcgYmludWtzYW4gbml5YSBzYSBQYXJpcz8iLCAiNTAwIiwgIjUwIiwgIjE1MCIsICI1LDAwMCJdLCBbIlNpbm8gYW5nIHBpbmFrYXNhbGFuIG5pIFJpdmFpbCBub29uZyBFbmVybyA2LCAxODMyPyIsICJBbcOpbGllIEJvdWRldCIsICJKZWFubmUgTG91aXNlIER1aGFtZWwiLCAiS2F0ZSBGb3giLCAiTWFyZ2FyZXQgRm94Il0sIFsiUGFhbm8gdHVtdWdvbiBzaSBSaXZhaWwgc2EgdXNvIG5vb25nIDE4NTQgbmEg4oCcdGFibGUgdHVybmluZ+KAnT8iLCAiTmFnLWFsaW5sYW5nYW4gc2l5YSBhdCBodW1pbmdpIG5nIHBhdHVuYXkiLCAiQWdhZCBzaXlhbmcgbmFuaXdhbGEiLCAiTmFnYWxpdCBzaXlhIGF0IHR1bWFuZ2dpbmcgcGFnLXVzYXBhbiBpdG8iLCAiSXRpbnVybyBuaXlhIGl0byBzYSBrYW55YW5nIHBhYXJhbGFuIl0sIFsiQmFraXQgZ3VtYW1pdCBzaSBSaXZhaWwgbmcgYmFnb25nIHBhbmdhbGFuIG5hIEFsbGFuIEthcmRlYz8iLCAiUGFyYSBpaGl3YWxheSBhbmcgYmFnb25nIGFrZGEgbml5YSBzYSB0cmFiYWhvIG5peWEgYmlsYW5nIGd1cm8iLCAiUGFyYSBoaW5kaSBzaXlhIG1ha2lsYWxhIG5nIGthbnlhbmcgcGFtaWx5YSIsICJEYWhpbCBpeW9uIGFuZyB1dG9zIG5nIGhhcmkiLCAiRGFoaWwgbmFrYWxpbXV0YW4gbml5YSBhbmcgdHVuYXkgbml5YW5nIHBhbmdhbGFuIl0sIFsiQWxpbmcgYWtsYXQgYW5nIGluaWxhdGhhbGEgbm9vbmcgMTg1NyBhdCBwdW5kYXN5b24gbmcga2FueWFuZyBtZ2EgdHVybz8iLCAiVGhlIFNwaXJpdHPigJkgQm9vayIsICJHZW5lc2lzIiwgIkhlYXZlbiBhbmQgSGVsbCIsICJUaGUgTWVkaXVtc+KAmSBCb29rIl0sIFsiQXlvbiBzYSBFc3Bpcml0aXNtbywgc2lubyBhbmcgdGluYXRhd2FnIG5hIE1hbmctYWFsaXc/IiwgIkFuZyBFc3Bpcml0dSBTYW50byIsICJTaSBKZXN1cyIsICJBbmcgRGl5b3MiLCAiU2kgUGVzdGFsb3p6aSJdLCBbIlNhYW4gaW5pbGliaW5nIHNpIEFsbGFuIEthcmRlYz8iLCAiUMOocmUgTGFjaGFpc2UsIFBhcmlzIiwgIkx5b24sIEZyYW5jZSIsICJSdWUgZGUgU8OodnJlcywgUGFyaXMiLCAiU3dpdHplcmxhbmQiXV0sICJCIjogW1siU2lubyBhbmcgbWdhIG1hZ3VsYW5nIG5pIFJpdmFpbD8iLCAiSmVhbi1CYXB0aXN0ZSBBbnRvaW5lIFJpdmFpbCBhdCBKZWFubmUgTG91aXNlIER1aGFtZWwiLCAiUGVzdGFsb3p6aSBhdCBBbcOpbGllIEJvdWRldCIsICJKZWFuLUJhcHRpc3RlIER1aGFtZWwgYXQgSmVhbm5lIExvdWlzZSBCb3VkZXQiLCAiSGlwcG9seXRlIFJpdmFpbCBhdCBLYXRlIEZveCJdLCBbIk5vb25nIGVkYWQgMTQsIGFubyBhbmcgZ2luYXdhIG5pIFJpdmFpbCBwYXJhIHNhIGthbnlhbmcgbWdhIGtha2xhc2U/IiwgIlRpbnVsdW5nYW4gbml5YSBhbmcgbWdhIGtha2xhc2VuZyBuYWhpaGlyYXBhbiIsICJCaW51a3NhbiBuaXlhIGFuZyBzYXJpbGkgbml5YW5nIHBhYXJhbGFuIiwgIklzaW51bGF0IG5peWEgYW5nIHVuYSBuaXlhbmcgYWtsYXQiLCAiUGluYW11bnVhbiBuaXlhIGFuZyBwYWFyYWxhbiBuaSBQZXN0YWxvenppIl0sIFsiSWxhbmcgd2lrYSBhbmcga2F5YSBuaXlhbmcgc2FsaXRhaW4/IiwgIkFuaW0iLCAiRGFsYXdhIiwgIlNhbXB1IiwgIklzYSJdLCBbIkFsaW4gc2EgbWdhIGl0byBhbmcgaXRpbnVybyBuaSBSaXZhaWwgc2Ega2FueWFuZyBwYWFyYWxhbiBzYSBQYXJpcz8iLCAiQ2hlbWlzdHJ5LCBwaHlzaWNzIGF0IGFuYXRvbXkiLCAiUGFnbHVsdXRvIGF0IHBhbmFuYWhpIiwgIlBhZ3Nhc2FrYSBhdCBwYW5naW5naXNkYSIsICJQYWdwaXBpbnRhIGF0IG11c2lrYSJdLCBbIkFubyBhbmcgbWdhIHByb3Blc3lvbiBuaSBBbcOpbGllIEJvdWRldD8iLCAiR3VybywgcGludG9yIGF0IG1ha2F0YSIsICJEb2t0b3IgYXQgYWJvZ2FkbyIsICJNYWdzYXNha2EgYXQgbWFuZ2luZ2lzZGEiLCAiUGFyaSBhdCBzdW5kYWxvIl0sIFsiQW5vbmcgdGFvbiBkdW1hbG8gc2kgUml2YWlsIHNhIGthdW5hLXVuYWhhbiBuaXlhbmcgc8OpYW5jZT8iLCAiMTg1NSIsICIxODQ4IiwgIjE4NTQiLCAiMTg2OSJdLCBbIlBhYW5vIHNpeWEgbmFnLWltYmVzdGlnYSBheW9uIHNhIGFyYWxpbj8iLCAiUGFyYW5nIHNpeWVudGlwaWtvOiBuYWd0YW5vbmcsIG5hZ3RhbGEgYXQgbmFnaGFtYmluZyIsICJOYW5pd2FsYSBhZ2FkIHNhIHVuYW5nIG1lbnNhaGUiLCAiVW1hc2EgbGFtYW5nIHNhIGt1d2VudG8gbmcgbWdhIGthaWJpZ2FuIiwgIkhpbmRpIG5hIHNpeWEgbmFnLXVzaXNhIHBhIl0sIFsiQWxpbmcgYWtsYXQgYW5nIHR1bmdrb2wgc2EgbWdhIG1vcmFsIG5hIGFyYWwgbmkgSmVzdXMgc2EgYXJhdy1hcmF3IG5hIGJ1aGF5PyIsICJUaGUgR29zcGVsIEFjY29yZGluZyB0byBTcGlyaXRpc20iLCAiR2VuZXNpcyIsICJUaGUgTWVkaXVtc+KAmSBCb29rIiwgIlRoZSBTcGlyaXRz4oCZIEJvb2siXSwgWyJBeW9uIHNhIEVzcGlyaXRpc21vLCBhbm8gYW5nIERpeW9zPyIsICJBbmcgS2F0YWFzLXRhYXNhbmcgS2F0YWxpbnVoYW4sIHVuYW5nIHNhbmhpIG5nIGxhaGF0IiwgIklzYW5nIGdhYmF5IGF0IGh1d2FyYW4gbGFtYW5nIiwgIkFuZyBNYW5nLWFhbGl3IiwgIklzYW5nIGVzcGlyaXR1bmcgbmFidWhheSBzYSBQYXJpcyJdLCBbIkFubyBhbmcgbWVuc2FoZSBuaSBLYXJkZWMgdHVuZ2tvbCBzYSBwYW5pbml3YWxhPyIsICJNYWctYXJhbCwgbWFnLWlzaXAsIGF0IGhheWFhbmcgZ2FiYXlhbiBuZyBrYXR3aXJhbiBhdCBrb25zZW5zeWEiLCAiTWFuaXdhbGEgbmFuZyB3YWxhbmcgdGFub25nIiwgIklwaWxpdCBhbmcgcGFuaW5pd2FsYSBzYSBpYmEiLCAiVW1hc2Egc2EgbWdhIG1lZGl1bSBsYW1hbmciXV0sICJDIjogW1siTm9vbmcgTWFyc28gMzEsIDE4NjksIGlsYW5nIHRhb24gbmEgc2kgS2FyZGVjIG5hbmcgc2l5YSBheSBwdW1hbmF3PyIsICI2NCIsICI1MCIsICIyMSIsICI4MCJdLCBbIkFubyBhbmcgZ2luYWdhd2EgbmkgS2FyZGVjIG5hbmcgc2l5YSBheSBiaWdsYW5nIHB1bWFuYXc/IiwgIkluYWF5b3MgYW5nIGthbnlhbmcgbWdhIHBhcGVsIHNhIGthbnlhbmcgbWVzYSIsICJOYWd0dXR1cm8gc2Ega2FueWFuZyBwYWFyYWxhbiIsICJOYWdsYWxha2JheSBzYSBTd2l0emVybGFuZCIsICJEdW1hZGFsbyBzYSBzw6lhbmNlIl0sIFsiQW5vIGFuZyB0YXdhZyBzYSBwYWdiYWJhbGlrIG5nIGVzcGlyaXR1IHNhIGJhZ29uZyBrYXRhd2FuPyIsICJSZWlua2FybmFzeW9uIiwgIlPDqWFuY2UiLCAiSGVyYmFyaXVtIiwgIlBlbiBuYW1lIl0sIFsiQXlvbiBzYSBFc3Bpcml0aXNtbywgc2lubyBzaSBKZXN1cz8iLCAiQXRpbmcgZ2FiYXkgYXQgaHV3YXJhbiIsICJBbmcgdW5hbmcgc2FuaGkgbmcgbGFoYXQiLCAiQW5nIE1hbmctYWFsaXciLCAiQW5nIG1heS1ha2RhIG5nIFRoZSBTcGlyaXRz4oCZIEJvb2siXSwgWyJJbGFuZyBha2xhdCBhbmcgaXNpbnVsYXQgbmkgS2FyZGVjIHNhIGxvb2IgbmcgbGFiaW5kYWxhd2FuZyB0YW9uPyIsICJMaW1hIiwgIlRhdGxvIiwgIlNhbXB1IiwgIklzYSJdLCBbIkFsaW5nIGFrbGF0IGFuZyB0dW5na29sIHNhIG1ha2F0YXJ1bmdhbmcgRGl5b3MgYXQgYnVoYXkgcGFna2F0YXBvcyBuZyBrYW1hdGF5YW4/IiwgIkhlYXZlbiBhbmQgSGVsbCIsICJHZW5lc2lzIiwgIlRoZSBHb3NwZWwgQWNjb3JkaW5nIHRvIFNwaXJpdGlzbSIsICJUaGUgTWVkaXVtc+KAmSBCb29rIl0sIFsiQWxpbmcgYWtsYXQgYW5nIHR1bmdrb2wgc2EgcGFnbGlraGEsIGFnaGFtIGF0IG1nYSBoaW1hbGE/IiwgIkdlbmVzaXMiLCAiSGVhdmVuIGFuZCBIZWxsIiwgIlRoZSBTcGlyaXRz4oCZIEJvb2siLCAiVGhlIE1lZGl1bXPigJkgQm9vayJdLCBbIkFubyBhbmcgYXJhbCBzYSBwYWdpZ2luZyBuYWdkdWR1ZGEgbmkgUml2YWlsIG5vb25nIDE4NTQ/IiwgIkFuZyBtYWh1aHVzYXkgbmEgaXNpcCBheSBodW1paGluZ2kgbmcgcGF0dW5heSIsICJIaW5kaSBkYXBhdCBtYWd0YW5vbmciLCAiRGFwYXQgbWFuaXdhbGEgYWdhZCBzYSB1c28iLCAiSGluZGkgbWFoYWxhZ2EgYW5nIGViaWRlbnN5YSJdLCBbIkFubyBhbmcgbmFrYXN1bGF0IHNhIGxpYmluZ2FuIG5pIEthcmRlYz8iLCAiSXBhbmdhbmFrLCBtYW1hdGF5LCBpc2lsYW5nIG11bGksIGF0IHVtdW5sYWQ6IGl5b24gYW5nIGJhdGFzIiwgIk5hcml0byBhbmcgdW5hbmcgbWVkaXVtIG5nIFBhcmlzIiwgIkRpdG8gbmFndGF0YXBvcyBhbmcgbGFoYXQiLCAiSXNhbmcgZ3VybyBuZyBMeW9uIl0sIFsiQW5vbmcgZ2FudGltcGFsYSBhbmcgbmFwYW5hbHVuYW4gbmkgUml2YWlsIG5vb25nIDE4MzE/IiwgIlByaXplIG9mIEhvbm91ciBwYXJhIHNhIHNhbmF5c2F5IHR1bmdrb2wgc2EgcGluYWthbWFodXNheSBuYSBwYXJhYW4gbmcgcGFndHV0dXJvIiwgIlVuYW5nIGdhbnRpbXBhbGEgc2EgcGFncGlwaW50YSIsICJNZWRhbHlhIHBhcmEgc2EgcGFna29sZWt0YSBuZyBoYWxhbWFuIiwgIkdhbnRpbXBhbGEgcGFyYSBzYSBUaGUgU3Bpcml0c+KAmSBCb29rIl1dfQ==",CAR=`<svg class="car" viewBox="0 0 200 230"><path d="M80 158h40v24q-20 18-40 0z" fill="#d49b78"/><path d="M8 232C12 198 50 184 78 177h44c28 7 66 21 70 55z" fill="#f4ecd8"/><path d="M78 177l22 26-12-27zM122 177l-22 26 12-27z" fill="#fff" stroke="#d9cfb6" stroke-width="2"/><g class="hd"><ellipse cx="31" cy="112" rx="9" ry="15" fill="#e2ae8a"/><ellipse cx="169" cy="112" rx="9" ry="15" fill="#e2ae8a"/><circle cx="29" cy="108" r="1.7" fill="#3b2417"/><path d="M30 100C30 50 65 28 100 28s70 22 70 72c0 50-30 82-70 82S30 150 30 100z" fill="#ecbf9b" stroke="#c58f6c" stroke-width="2"/><circle cx="56" cy="140" r="10" fill="#f08a7a" opacity=".25"/><circle cx="144" cy="140" r="10" fill="#f08a7a" opacity=".25"/><path d="M28 98C22 45 60 18 102 18c44 0 74 30 70 80-4-20-12-36-22-42-22-10-78-10-98 2-10 8-18 24-24 40z" fill="#17171a"/><path d="M60 30q30-10 60-2" stroke="#4a4a55" stroke-width="3" fill="none" stroke-linecap="round" opacity=".6"/><path d="M52 83q18-9 38 0M110 83q20-9 38 0" stroke="#17171a" stroke-width="5" stroke-linecap="round" fill="none"/><g class="ey"><circle cx="70" cy="107" r="5.6" fill="#2a1710"/><circle cx="130" cy="107" r="5.6" fill="#2a1710"/><circle cx="72" cy="105" r="1.8" fill="#fff"/><circle cx="132" cy="105" r="1.8" fill="#fff"/></g><g fill="#bcd0ff" fill-opacity=".22" stroke="#27303b" stroke-width="4.5"><rect x="46" y="90" width="48" height="34" rx="12"/><rect x="106" y="90" width="48" height="34" rx="12"/></g><path d="M94 99q6-6 12 0M46 99l-13-2M154 99l13-2" stroke="#27303b" stroke-width="4" fill="none" stroke-linecap="round"/><path d="M54 118q16 8 34 0M114 118q16 8 34 0" stroke="#7a86ff" stroke-width="3" fill="none" opacity=".65" stroke-linecap="round"/><path d="M91 128q9 11 18 0" fill="#e0a27d" stroke="#bf8663" stroke-width="2.5" stroke-linecap="round"/><path d="M76 147q13-8 24-3 11-5 26 3" stroke="#4a3328" stroke-width="3.5" fill="none" stroke-linecap="round" opacity=".75"/><path d="M94 173q8 6 16 0" stroke="#4a3328" stroke-width="4" fill="none" stroke-linecap="round" opacity=".8"/><path class="ms" d="M82 154q22 17 45-2" stroke="#a8453f" stroke-width="4.5" fill="none" stroke-linecap="round"/><g class="mo"><path d="M84 153q20-3 40 0-8 23-22 22-12-1-18-22z" fill="#7d2630"/><path d="M92 168q10-8 22 0-6 7-11 7z" fill="#e0707a"/><path d="M88 154q16-2 32 0l-2 5q-14-2-28 0z" fill="#fff"/></g></g></svg>`;
+const DATA=JSON.parse(new TextDecoder().decode(Uint8Array.from(atob(B),c=>c.charCodeAt(0))));
+const $=id=>document.getElementById(id),K="kc_exam_v1",LIM=10,PASS=8;
+$("av1").innerHTML=$("av2").innerHTML=CAR;
+const SC=["intro","conf","cdn","q","res"],show=id=>SC.forEach(s=>$(s).hidden=s!=id);
+const norm=s=>s.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/\s+/g," ").trim();
+function h53(s,seed=0){let a=0xdeadbeef^seed,b=0x41c6ce57^seed;for(let i=0;i<s.length;i++){const c=s.charCodeAt(i);a=Math.imul(a^c,2654435761);b=Math.imul(b^c,1597334677)}a=Math.imul(a^(a>>>16),2246822507)^Math.imul(b^(b>>>13),3266489909);b=Math.imul(b^(b>>>16),2246822507)^Math.imul(a^(a>>>13),3266489909);return 4294967296*(2097151&b)+(a>>>0)}
+const rng=seed=>{let a=seed>>>0;return()=>{a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}};
+const shuf=(arr,r)=>{const a=arr.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+function build(name){const k=norm(name),hv=h53(k),set="ABC"[hv%3],r=rng(hv%4294967296);
+ const qs=shuf([...Array(LIM).keys()],r).map(n=>{const q=DATA[set][n];return{t:q[0],o:shuf([1,2,3,4],r).map(j=>({x:q[j],i:j-1}))}});return{set,qs}}
+function save(r){const s=JSON.stringify(r);try{localStorage.setItem(K,s)}catch(e){}try{document.cookie=K+"="+encodeURIComponent(s)+";max-age=31536000;path=/;SameSite=Lax"}catch(e){}}
+function load(){let s=null;try{s=localStorage.getItem(K)}catch(e){}if(!s){const m=document.cookie.match(new RegExp("(?:^|; )"+K+"=([^;]*)"));if(m)s=decodeURIComponent(m[1])}try{return s?JSON.parse(s):null}catch(e){return null}}
+const codeOf=r=>"KC-"+r.set+r.score+"-"+h53(norm(r.name)+"|"+r.set+"|"+r.score+"|"+r.ts+"|kayouth",7).toString(36).toUpperCase().slice(-6);
+function okName(v){v=v.replace(/\s+/g," ").trim();
+ if(v.length<5)return"Ilagay ang buo mong pangalan sa Facebook.";
+ if(!/^[\p{L}][\p{L}\p{M}.'’\- ]*$/u.test(v))return"Letra lang ang puwede: walang numero, emoji o espesyal na simbolo.";
+ if(v.split(" ").filter(w=>w.replace(/[^\p{L}]/gu,"").length>=2).length<2)return"Kailangan ng pangalan at apelyido, hindi palayaw lang.";return""}
+let S=null,rec=null;
+$("go1").onclick=()=>{const v=$("nm").value,e=okName(v);if(e)return $("er").textContent=e;if(!$("ck").checked)return $("er").textContent="Lagyan ng tsek na ito ang eksaktong pangalan mo sa Facebook.";$("er").textContent="";$("nm").value=v.replace(/\s+/g," ").trim();$("cn").textContent=$("nm").value;show("conf")};
+$("bk").onclick=()=>show("intro");
+$("go2").onclick=()=>{const name=$("nm").value;const ex=load();if(ex&&(ex.done||ex.started))return init();show("cdn");let n=3;$("cdv").textContent=n;const iv=setInterval(()=>{n--;if(n<=0){clearInterval(iv);begin(name)}else{$("cdv").textContent=n;$("cdv").style.animation="none";void $("cdv").offsetWidth;$("cdv").style.animation=""}},900)};
+function begin(name){const b=build(name);S={set:b.set,qs:b.qs,qi:0,active:false,resume:false};rec={name,set:b.set,started:true,done:false,answers:[],ts:Date.now()};save(rec);$("dt").innerHTML="<i></i>".repeat(LIM);show("q");startQ()}
+function startQ(){if(S.qi>=LIM)return finish();const q=S.qs[S.qi];$("qn").textContent="Tanong "+(S.qi+1)+" ng "+LIM;$("qt").textContent=q.t;$("ts").hidden=true;
+ $("dt").querySelectorAll("i").forEach((d,k)=>d.className=k<S.qi?"d":"");
+ $("ops").innerHTML="";q.o.forEach((o,k)=>{const b=document.createElement("button");b.className="opt";b.innerHTML="<b>"+"ABCD"[k]+"</b><span></span>";b.lastChild.textContent=o.x;b.onclick=()=>{b.classList.add("sel");answer(o.i,"pick")};$("ops").appendChild(b)});
+ $("q").classList.remove("low");S.t0=Date.now();S.active=true;clearInterval(S.iv);S.iv=setInterval(tick,100);tick()}
+function tick(){const l=Math.max(0,LIM-(Date.now()-S.t0)/1000);$("bf").style.width=l*10+"%";$("tn").textContent=Math.ceil(l);$("q").classList.toggle("low",l<=3.5);if(l<=0)answer(-1,"time")}
+function answer(i,why){if(!S.active)return;S.active=false;clearInterval(S.iv);rec.answers[S.qi]=i;S.qi++;save(rec);
+ if(why=="left"){S.resume=true;if(S.qi>=LIM)finish();return}
+ if(why=="time"){$("ts").textContent="Naubos ang oras, nabilang itong mali.";$("ts").hidden=false}
+ setTimeout(startQ,why=="time"?900:450)}
+document.addEventListener("visibilitychange",()=>{if(!S||!rec||rec.done)return;
+ if(document.hidden){if(S.active)answer(-1,"left")}
+ else if(S.resume){S.resume=false;startQ();$("ts").textContent="Umalis ka sa page, kaya nabilang na mali ang naunang tanong.";$("ts").hidden=false}});
+function finish(int){clearInterval(S&&S.iv);rec.score=rec.answers.filter(a=>a===0).length;rec.done=true;rec.ts=Date.now();if(int)rec.interrupted=true;save(rec);showRes(rec)}
+function showRes(r){const ok=r.score>=PASS;show("res");$("rt").className="tag "+(ok?"pass":"fail");$("rt").textContent=ok?"PASADO":"HINDI PASADO";
+ $("rg").className="ring "+(ok?"pass":"fail");$("rs").textContent=r.score+"/"+LIM;
+ setTimeout(()=>$("rg").querySelector(".p").style.strokeDashoffset=377*(1-r.score/LIM),60);
+ $("rh").textContent=ok?"Congratulations, pumasa ka!":"Salamat sa pagsali!";
+ $("rm").textContent=ok?"I-screenshot ang page na ito at ipadala sa ating Facebook Group para sa iyong recognition.":"Kailangan ng "+PASS+"/"+LIM+" para pumasa. Isang beses lang ang pagsusulit kaya hindi na ito mauulit. Balikan ang aralin para matuto pa!";
+ const d=new Date(r.ts),ds=d.toLocaleString("en-PH",{dateStyle:"medium",timeStyle:"short"});
+ $("mt").innerHTML="";[["Pangalan",r.name],["Iskor",r.score+" sa "+LIM],["Set",r.set],["Petsa at oras",ds],["Code",codeOf(r)]].forEach(([a,b])=>{const e=document.createElement("div");e.innerHTML="<span></span><b></b>";e.firstChild.textContent=a;e.lastChild.textContent=b;$("mt").appendChild(e)});
+ $("rn").textContent=r.interrupted?"Naputol ang pagsusulit dahil nag-refresh o umalis ka sa page, kaya natapos ito sa iskor na naitala.":""}
+function init(){rec=load();if(rec&&rec.done)return showRes(rec);if(rec&&rec.started){S=null;return finish(true)}show("intro")}
+init();
+document.addEventListener("contextmenu",e=>{if(!$("q").hidden)e.preventDefault()});
+["copy","cut","dragstart"].forEach(t=>document.addEventListener(t,e=>{if(!$("q").hidden)e.preventDefault()}));
+</script></body></html>
